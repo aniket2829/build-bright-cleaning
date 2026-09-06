@@ -1,0 +1,347 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   THRESHOLD: the walk from a cold street into a warm, handled house.
+   The palette is a temperature scale, not a swatch set. Dusk is outside,
+   plaster is inside, amber is the light you are walking toward. Amber is the
+   action colour and nothing else wears it.
+   --------------------------------------------------------------------------- */
+
+@theme {
+  /* Outside: winter dusk */
+  --color-dusk-950: #070c15;
+  --color-dusk-900: #0a111c;
+  --color-dusk-800: #0e1726;
+  --color-dusk-700: #16233a;
+  --color-dusk-600: #22334f;
+
+  /* Cold light on snow: text and rules on the dusk side */
+  --color-frost-100: #e8eef7;
+  --color-frost-200: #d6deea;
+  --color-frost-400: #93a6c0;
+  --color-frost-500: #6e86a8;
+
+  /* Depth: the dark green of a winter yard */
+  --color-pine-900: #16241d;
+  --color-pine-800: #23372e;
+  --color-pine-600: #355644;
+
+  /* The light itself */
+  --color-amber-600: #c87f22;
+  --color-amber-500: #e8a33d;
+  --color-amber-400: #f2bb6b;
+  --color-amber-300: #f7d3a0;
+
+  /* Inside: warm plaster */
+  --color-plaster-50: #f9f5ee;
+  --color-plaster-100: #efe7da;
+  --color-plaster-200: #e3d8c6;
+  --color-plaster-300: #d2c4ac;
+
+  /* Text on the warm side */
+  --color-ink-900: #1a1710;
+  --color-ink-700: #3b342a;
+  --color-ink-500: #6b6153;
+
+  --font-display: var(--font-vollkorn), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-schibsted), ui-sans-serif, system-ui, sans-serif;
+
+  --ease-threshold: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---------------------------------------------------------------------------
+   The warming scroll. `--warmth` runs 0 (street) to 1 (inside) and is written
+   to the root element by <Warming/>. The header and the bloom read it. Under
+   reduced motion it is pinned to 1 and never animates; nothing is lost.
+   --------------------------------------------------------------------------- */
+
+:root {
+  --warmth: 0;
+  color-scheme: dark;
+  accent-color: var(--color-amber-500);
+  caret-color: var(--color-amber-500);
+  scrollbar-color: var(--color-frost-500) var(--color-dusk-900);
+  scrollbar-width: thin;
+}
+
+body {
+  background-color: var(--color-dusk-800);
+  color: var(--color-frost-200);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Browser surfaces belong to the design system too. */
+::selection {
+  background-color: var(--color-amber-500);
+  color: var(--color-ink-900);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-dusk-900);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-dusk-600);
+  border: 2px solid var(--color-dusk-900);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-frost-500);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-amber-500);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+a {
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+
+::placeholder {
+  color: var(--color-ink-500);
+  opacity: 1;
+}
+
+/* Warm side inverts the browser surfaces so the caret and selection stay legible. */
+.warm-side {
+  --tw-prose-invert: initial;
+  color-scheme: light;
+  scrollbar-color: var(--color-plaster-300) var(--color-plaster-100);
+}
+.warm-side ::selection {
+  background-color: var(--color-ink-900);
+  color: var(--color-plaster-50);
+}
+
+/* Prices, room counts and durations all read on one scale, so they must align. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+.display-tight {
+  letter-spacing: -0.028em;
+  text-wrap: balance;
+}
+
+.measure {
+  max-width: 68ch;
+}
+
+/* ---------------------------------------------------------------------------
+   ARRIVAL: content crosses a widening aperture of light rather than fading in.
+   Reserved for threshold moments, not applied to every section.
+   --------------------------------------------------------------------------- */
+
+@keyframes aperture-open {
+  from {
+    clip-path: inset(0 42% 0 42%);
+    filter: blur(10px);
+    opacity: 0;
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+.aperture {
+  opacity: 1;
+}
+.aperture[data-armed="true"] {
+  opacity: 0;
+}
+.aperture[data-open="true"] {
+  animation: aperture-open 1100ms var(--ease-threshold) both;
+}
+
+/* ---------------------------------------------------------------------------
+   THE SWEEP — the hero's authored moment. A broom crosses once, the content
+   arrives behind it, then it settles into the open right half and keeps
+   working. Transform and opacity only, so the whole thing stays on the
+   compositor.
+   --------------------------------------------------------------------------- */
+
+.broom-stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.broom {
+  position: absolute;
+  transform-origin: 50% 6%;
+}
+
+.broom-mark {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* the ground it has just passed over */
+.broom-trace {
+  position: absolute;
+  left: 50%;
+  bottom: -7%;
+  width: 96%;
+  height: 16%;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--color-amber-500) 34%, transparent),
+    transparent 72%
+  );
+  filter: blur(7px);
+}
+
+/* beat one: the pass that delivers the content */
+.broom--lead {
+  top: 12%;
+  left: 60%;
+  width: clamp(104px, 11.5vw, 168px);
+  animation: broom-pass 1200ms var(--ease-threshold) both;
+}
+
+/* beat two: it stays and keeps working */
+.broom-arc {
+  transform-origin: 50% 5%;
+  animation: broom-arc 5600ms 1500ms ease-in-out infinite;
+}
+
+.broom-arc--slow {
+  animation-duration: 7400ms;
+  animation-delay: 2300ms;
+}
+
+.broom-bristles {
+  transform-box: view-box;
+  transform-origin: 60px 152px;
+  animation: bristle-splay 5600ms 1500ms ease-in-out infinite;
+}
+
+.broom-arc--slow .broom-bristles {
+  animation-duration: 7400ms;
+  animation-delay: 2300ms;
+}
+
+.broom--second {
+  top: 40%;
+  left: 81%;
+  width: clamp(80px, 9vw, 132px);
+  opacity: 0.75;
+  animation: broom-join 900ms 1250ms ease-out both;
+}
+
+@keyframes broom-pass {
+  0% {
+    transform: translateX(-230%) rotate(-30deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0) rotate(-13deg);
+    opacity: 1;
+  }
+}
+
+@keyframes broom-join {
+  0% {
+    transform: translateX(-70%) rotate(-24deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0) rotate(-8deg);
+    opacity: 0.75;
+  }
+}
+
+@keyframes broom-arc {
+  0%,
+  100% {
+    transform: rotate(-5deg) translateX(-5%);
+  }
+  50% {
+    transform: rotate(7deg) translateX(7%);
+  }
+}
+
+@keyframes bristle-splay {
+  0%,
+  100% {
+    transform: scaleX(1) scaleY(1);
+  }
+  50% {
+    transform: scaleX(1.06) scaleY(0.985);
+  }
+}
+
+/* the content the broom delivers */
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.arrive {
+  animation: arrive 720ms var(--ease-threshold) both;
+  animation-delay: var(--d, 0ms);
+}
+
+@media (max-width: 767px) {
+  /* one broom is enough in a narrow column */
+  .broom--second {
+    display: none;
+  }
+  /* A full-width text column leaves no gutter to sweep, and a broom cropped
+     to a sliver of handle is worse than none. Desktop keeps it; the phone
+     keeps the short, plain hero instead. */
+  .broom--lead {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aperture,
+  .aperture[data-armed="true"],
+  .aperture[data-open="true"] {
+    animation: none !important;
+    opacity: 1 !important;
+    clip-path: none !important;
+    filter: none !important;
+  }
+  .broom--lead,
+  .broom--second,
+  .broom-arc,
+  .broom-bristles,
+  .arrive {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+  .broom--second {
+    opacity: 0.75;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
