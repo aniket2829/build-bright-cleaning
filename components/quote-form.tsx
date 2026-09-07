@@ -209,6 +209,22 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
             </ol>
 
             <form action={formAction} className="pt-10">
+              {/* Honeypot. Hidden from sight, from screen readers and from the
+                  tab order, and never autofilled, so only something filling
+                  every input on the page will put anything in it. Not
+                  type="hidden": bots skip those. */}
+              <div aria-hidden className="sr-only">
+                <label htmlFor="bb-company">Company</label>
+                <input
+                  id="bb-company"
+                  type="text"
+                  name="company"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  defaultValue=""
+                />
+              </div>
+
               {/* every answer travels with the submit, whatever step it was given on */}
               <input type="hidden" name="service" value={draft.service} />
               <input type="hidden" name="bedrooms" value={draft.bedrooms || ""} />

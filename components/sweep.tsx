@@ -133,10 +133,13 @@ const DRIVE_END = 0.42; // the keyframe where the working stroke finishes
 const EASE_ENTER = [0.16, 1, 0.3, 1] as const; // --ease-threshold
 const EASE_DRIVE = [0.38, 0, 0.22, 1] as const; // the push: commit, then settle
 
-const HEAD_ENTER_FROM = 48; // where the tips clear the text column on entry
-const HEAD_PLANT = 62.5; // where the entrance sets them down
-const HEAD_DRIVE_TO = 74; // the far end of every working stroke
-const PILE_X = 75.5; // just past it, so no stroke ploughs through the pile
+const HEAD_ENTER_FROM = 49.2; // where the tips clear the text column on entry
+const HEAD_PLANT = 63.5; // where the entrance sets them down
+const HEAD_DRIVE_TO = 75.1; // the far end of every working stroke
+
+// Where the dust ends up is --pile-x in globals.css and only there: motes
+// resolve their travel against it with calc(), so the pile and the dust heading
+// for it can never drift apart the way two copies of a number do.
 
 /**
  * Inverse of a CSS cubic-bezier easing: given a progress value, the fraction of
@@ -191,7 +194,7 @@ function mote(i: number, x: number) {
   const d = noise(i + 43);
   return {
     x,
-    y: 52 + d * 12,
+    y: 51 + d * 11,
     s: 2.1 + d * 2.3 + noise(i + 71) * 0.7,
     o: 0.36 + d * 0.3 + noise(i + 131) * 0.16,
     dy: -3 - noise(i + 173) * 11, // swept dust rolls forward and lifts a little
@@ -254,13 +257,15 @@ type Mote = (typeof FIELD)[number];
  * nothing measured at runtime.
  */
 function moteStyle(m: Mote, toPile: boolean) {
-  const dx = toPile ? PILE_X + m.jitter - m.x : 3 + m.s;
+  const dx = toPile
+    ? `calc(var(--pile-x) - ${(m.x - m.jitter).toFixed(2)}%)`
+    : `${(3 + m.s).toFixed(2)}%`;
   return {
     "--x": `${m.x.toFixed(2)}%`,
     "--y": `${m.y.toFixed(2)}%`,
     "--s": `${m.s.toFixed(2)}px`,
     "--o": m.o.toFixed(2),
-    "--dx": `${dx.toFixed(2)}%`,
+    "--dx": dx,
     "--dy": `${m.dy.toFixed(1)}px`,
     "--dur": `${Math.round(m.dur)}ms`,
     animationDelay: `${Math.round(m.delay)}ms`,

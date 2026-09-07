@@ -37,7 +37,8 @@ Visitors are comparison-shopping local cleaning companies, frequently on a phone
 - Service area: Edmonton only.
 - Confirmed since the shape interview: a phone number is offered as a secondary path beside the form; a journal (blog) is part of the site.
 - **No figures anywhere.** The user later directed that all pricing and all visit durations be removed from the site. There are no starting-at prices, no rate card, no live estimate, no hour ranges and no cadence lines; `/pricing` was deleted. The site still states the pricing *model* (a fixed price for the job, never hourly) and routes every cost question to the quote form, where a person prices it by hand.
-- Still undecided: the quote-form submission backend (currently a validating stub), online booking/scheduling (deliberately absent), any CMS behind the journal, and legal pages.
+- The quote form emails enquiries to the business over Gmail SMTP (`lib/mailer.ts`); the destination is `QUOTE_INBOX`, defaulting to `business.email`. It needs `SMTP_USER` and a Google App Password in `SMTP_PASSWORD` to send, and nothing is stored, so a failed send loses the enquiry.
+- Still undecided: online booking/scheduling (deliberately absent), any CMS behind the journal, whether enquiries should also be persisted or pushed to a CRM, and legal pages.
 
 ## Brand Commitments
 

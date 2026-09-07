@@ -10,7 +10,7 @@ Work top to bottom before this site is used commercially.
 |---|---|---|
 | Business name | `lib/content.ts` → `business.name` | Also in `app/layout.tsx` metadata and the footer wordmark. |
 | Phone number | `lib/content.ts` → `business.phoneDisplay` / `phoneHref` | Set to **(825) 963-3038**. It appears in the header, footer, FAQ, About and quote pages. |
-| Email | `lib/content.ts` → `business.email` | Set to **navneetlotey2000@gmail.com**. This is the destination for quote enquiries, but nothing is wired to send there yet — see § 6. |
+| Email | `lib/content.ts` → `business.email` | Set to **navneetlotey2000@gmail.com**. Quote enquiries are emailed here over Gmail SMTP — see § 6 for the credentials it needs. `QUOTE_INBOX` overrides it without touching code. |
 | Coverage | `lib/content.ts` → `business.cities` and `cities` | **Edmonton only.** Calgary was removed from the coverage list, the city pages, the reviews and every page's copy. Adding a second city is a content change in `cities`; the home page grid and `/areas` already adapt. |
 | Trading hours | `lib/content.ts` → `business.hours` | |
 | Domain | `app/layout.tsx` → `metadataBase` | Currently `https://buildbright.example`. |
@@ -51,7 +51,23 @@ The same applies to: fixed per-job pricing (not hourly), the two-day notice poli
 
 ## 6. The quote form
 
-`app/quote/actions.ts` validates the answers and returns a reference, then stops. **Nothing is sent anywhere, including to `business.email`.** Wire `submitQuote` to your real destination (inbox, CRM, database) before taking traffic, and add spam protection at the same time.
+`app/quote/actions.ts` validates the answers and emails the enquiry to `QUOTE_INBOX` (default: `business.email`) over Gmail SMTP, via `lib/mailer.ts`. The customer is set as `Reply-To`, so replying from the inbox writes back to them.
+
+**It will not send until two secrets exist.** Copy `.env.example` to `.env.local` and fill in:
+
+| Variable | What it is |
+|---|---|
+| `SMTP_USER` | The Gmail account the site sends *as*. Gmail rewrites `From` to this address, so it must own the app password. |
+| `SMTP_PASSWORD` | A 16-character **Google App Password** — not the account password. Requires 2-Step Verification on the account: Google Account → Security → 2-Step Verification → App passwords. |
+| `QUOTE_INBOX` | Optional. Where enquiries land; defaults to `business.email`. |
+
+Run `npm run mail:check` to prove the login without sending anything, or `npm run mail:check -- --send` to post one test message. Until the secrets are set the form fails honestly: it shows the phone number instead of a false confirmation, and the reason is logged server-side.
+
+**Known limits before real traffic:**
+
+- **Gmail caps a free account at roughly 500 messages a day** and can throttle or lock an account it thinks is being used for bulk sending. For anything beyond light volume, move to a transactional sender (Resend, Postmark, SES) — only `lib/mailer.ts` changes.
+- **Spam protection is a honeypot plus a per-IP cap of 5/hour** (`lib/rate-limit.ts`). The limiter is in-memory, so it holds for a single long-lived server but **not** for serverless or multi-instance deploys, where each instance counts separately and cold starts forget. Move the counter to Redis/Upstash, or limit at the CDN, if you deploy that way. Add a real captcha if bots find the form.
+- **No enquiry is stored.** If the email fails to send, the enquiry is gone. A database or CRM write alongside the send is the fix.
 
 The form now collects, and `submitQuote` now validates:
 
