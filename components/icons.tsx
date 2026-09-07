@@ -99,21 +99,3 @@ export function Key({ className }: IconProps) {
     </svg>
   );
 }
-
-export function Mark({ className }: IconProps) {
-  /* The wordmark glyph: a doorway with light crossing the threshold. */
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden focusable="false" className={className}>
-      <path d="M5 21V6.2a1 1 0 01.6-.92l6-2.6a1 1 0 011.4.92V21" fill="currentColor" opacity="0.28" />
-      <path
-        d="M5 21V6.2a1 1 0 01.6-.92l6-2.6a1 1 0 011.4.92V21"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-      <path d="M13 21l6-4.6V21z" fill="currentColor" />
-      <path d="M9.6 12.4v2.2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-    </svg>
-  );
-}

@@ -32,6 +32,18 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_CA",
   },
+  /* The supplied icon set in /public, declared explicitly rather than through
+     the app/icon file convention: the artwork is the brand's, not generated
+     here, so there is one place it lives and one place it is referenced. */
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-16.png", type: "image/png", sizes: "16x16" },
+      { url: "/favicon-32.png", type: "image/png", sizes: "32x32" },
+      { url: "/icon-512.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+  },
 };
 
 const CONTRACT = `<!--

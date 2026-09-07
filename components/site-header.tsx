@@ -1,10 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { business } from "@/lib/content";
-import { ArrowRight, Mark, Phone } from "@/components/icons";
+import { ArrowRight, Phone } from "@/components/icons";
 
 const nav = [
   { href: "/services", label: "Services" },
@@ -53,7 +54,20 @@ export function SiteHeader() {
           className="group flex items-center gap-2.5 text-frost-100 no-underline"
           aria-label={`${business.name} home`}
         >
-          <Mark className="h-7 w-7 text-amber-500 transition-transform duration-500 group-hover:scale-110" />
+          {/* The badge out of the supplied lockup. `logo.png` is 406x100 with
+              the badge occupying the leading 100x100, so a square box with
+              object-cover from the left crops to exactly it — one asset, no
+              derived crop to keep in sync. The rest of the lockup is
+              dark-on-transparent and would vanish on this ground, so the
+              wordmark stays live type. */}
+          <Image
+            src="/logo.png"
+            alt=""
+            width={406}
+            height={100}
+            priority
+            className="h-7 w-7 shrink-0 rounded-[0.4rem] object-cover object-left transition-transform duration-500 group-hover:scale-110"
+          />
           <span className="font-display text-[1.0625rem] leading-none font-semibold tracking-tight">
             Build&nbsp;Bright
           </span>

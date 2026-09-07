@@ -1,6 +1,7 @@
+import Image from "next/image";
 import Link from "next/link";
 import { business, cities, services } from "@/lib/content";
-import { ArrowRight, Mark, Phone } from "@/components/icons";
+import { ArrowRight, Phone } from "@/components/icons";
 
 export function SiteFooter() {
   return (
@@ -27,12 +28,16 @@ export function SiteFooter() {
 
         <div className="grid grid-cols-2 gap-x-8 gap-y-12 pt-14 md:grid-cols-4 lg:grid-cols-5">
           <div className="col-span-2 lg:col-span-1">
-            <div className="flex items-center gap-2.5 text-ink-900">
-              <Mark className="h-7 w-7 text-pine-800" />
-              <span className="font-display text-[1.0625rem] leading-none font-semibold tracking-tight">
-                Build&nbsp;Bright
-              </span>
-            </div>
+            {/* The warm side is the one ground the supplied lockup was drawn
+                for, so the footer carries it whole — badge, wordmark and
+                tagline — rather than the header's cropped badge. */}
+            <Image
+              src="/logo.png"
+              alt={business.name}
+              width={406}
+              height={100}
+              className="h-auto w-[15rem] max-w-full"
+            />
             <p className="mt-4 max-w-[30ch] text-[0.9375rem] leading-relaxed text-ink-500">
               Residential cleaning in Edmonton. One cleaner, the same one, every time.
             </p>
