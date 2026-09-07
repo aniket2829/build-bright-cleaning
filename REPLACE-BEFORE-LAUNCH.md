@@ -25,13 +25,11 @@ Replace with real, attributable reviews, or delete `/reviews` and the home-page 
 
 ## 3. Prices
 
-`lib/content.ts` → `services[].from` and the `estimate()` function are illustrative figures, not a rate card. Every surface that shows them already labels them illustrative:
+**There are none, by product decision.** The site names no figure anywhere: no starting-at prices, no rate card, no live estimate, and no visit durations. The `/pricing` page, the price scale and the quote form's estimate panel were all removed, and `services[].from`, `services[].hours`, `services[].cadence` and the `estimate()` helper no longer exist in `lib/content.ts`.
 
-- `/pricing`, the whole table
-- `components/scale.tsx`, "One-bedroom home · illustrative"
-- `components/quote-form.tsx`, the summary panel estimate
+What the site does still promise, in copy, is the *pricing model*: a fixed price for the job rather than an hourly rate, quoted by a person after the form is submitted. That claim is on the home page, `/faq`, `/about` and every service page.
 
-Replace the numbers and the per-bedroom / per-bathroom multipliers in `estimate()` with your real pricing, then decide whether the "illustrative" labels should stay.
+If you later want figures back, the honest place for them is a new `/pricing` page plus a `from` field on `Service`, both rebuilt deliberately — do not scatter numbers into the service pages. Whatever you add must be a real rate card, not an illustrative one, since nothing on the site currently labels any number as illustrative.
 
 ## 4. Claims the site deliberately does not make
 
@@ -42,7 +40,7 @@ These were left out because they become legally material the moment the site is 
 - Police / background-check specifics (the site says "vetted" and nothing more)
 - Years in business, team size, number of clients
 - Awards, memberships, accreditations
-- Any guarantee beyond what you will actually honour, note the 48-hour re-clean promise appears on `/pricing`, `/faq` and the home page and must be a real policy or be removed
+- Any guarantee beyond what you will actually honour, note the 48-hour re-clean promise appears on `/faq` and the home page and must be a real policy or be removed
 
 ## 5. Copy that asserts how you operate
 
@@ -52,7 +50,7 @@ The same applies to: fixed per-job pricing (not hourly), the two-day notice poli
 
 ## 6. The quote form
 
-`app/quote/actions.ts` validates, prices, and returns a reference, then stops. **Nothing is sent anywhere.** Wire `submitQuote` to your real destination (inbox, CRM, database) before taking traffic, and add spam protection at the same time.
+`app/quote/actions.ts` validates the answers and returns a reference, then stops. **Nothing is sent anywhere.** Wire `submitQuote` to your real destination (inbox, CRM, database) before taking traffic, and add spam protection at the same time.
 
 ## 7. Imagery
 

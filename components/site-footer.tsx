@@ -52,7 +52,6 @@ export function SiteFooter() {
                 {s.name}
               </FooterLink>
             ))}
-            <FooterLink href="/pricing">Pricing</FooterLink>
           </FooterCol>
 
           <FooterCol title="Where we clean">
@@ -83,8 +82,8 @@ export function SiteFooter() {
             © {new Date().getFullYear()} {business.name}. Calgary &amp; Edmonton, Alberta.
           </p>
           <p className="max-w-[52ch] sm:text-right">
-            Demonstration site. Company details, prices, reviews and contact information are
-            written for this build and describe no real business.
+            Demonstration site. Company details, reviews and contact information are written for
+            this build and describe no real business.
           </p>
         </div>
       </div>

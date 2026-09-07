@@ -33,9 +33,10 @@ Visitors are comparison-shopping local cleaning companies, frequently on a phone
 ## Capabilities and Constraints
 
 - Single conversion path: **request a quote**. A quote form is the primary call to action across the site.
-- Services offered: recurring house cleaning, deep cleaning, move-in/move-out cleaning, and one-time cleans. Residential only, no commercial or post-construction offering.
+- Services offered: recurring house cleaning, deep cleaning, move-in/move-out cleaning, one-time cleans, post-construction cleaning, steam carpet cleaning, and wall stain removal. Residential only; no commercial offering. (Post-construction, steam carpet and wall stain removal were added by the user after the shape interview, which had recorded the first four and no post-construction work.)
 - Service area: Calgary and Edmonton.
-- Confirmed since the shape interview: starting-at prices are shown openly per service; a phone number is offered as a secondary path beside the form; a journal (blog) is part of the site.
+- Confirmed since the shape interview: a phone number is offered as a secondary path beside the form; a journal (blog) is part of the site.
+- **No figures anywhere.** The user later directed that all pricing and all visit durations be removed from the site. There are no starting-at prices, no rate card, no live estimate, no hour ranges and no cadence lines; `/pricing` was deleted. The site still states the pricing *model* (a fixed price for the job, never hourly) and routes every cost question to the quote form, where a person prices it by hand.
 - Still undecided: the quote-form submission backend (currently a validating stub), online booking/scheduling (deliberately absent), any CMS behind the journal, and legal pages.
 
 ## Brand Commitments
@@ -52,7 +53,7 @@ This is a demo/portfolio build, and the user has explicitly authorized invented 
 
 1. **The quote is the product.** Every section either earns the quote request or removes a reason to hesitate. Anything doing neither is cut.
 2. **Trust before persuasion.** The visitor is deciding who to let into their home. Reassurance is a structural requirement, not decorative.
-3. **Answer the price question honestly.** Visitors leave when cost is unknowable. The site must move them toward a real number as directly as the undecided pricing model allows.
+3. **Answer the price question honestly.** Visitors leave when cost is unknowable. Since the site names no figures, it must be unambiguous about *how* it prices — fixed per job, quoted by a person, nothing added afterwards — and move the visitor to the quote form as directly as possible. Being silent on price is a decision the site has to carry well, not hide.
 4. **Local, not generic.** Calgary and Edmonton are stated plainly. Nothing should read as an interchangeable national franchise template.
 5. **Invent nothing verifiable.** Dummy content stays in the realm of the plausible and non-material; it never becomes a checkable claim.
 

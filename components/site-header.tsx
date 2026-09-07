@@ -8,7 +8,6 @@ import { ArrowRight, Mark, Phone } from "@/components/icons";
 
 const nav = [
   { href: "/services", label: "Services" },
-  { href: "/pricing", label: "Pricing" },
   { href: "/areas", label: "Areas" },
   { href: "/reviews", label: "Reviews" },
   { href: "/about", label: "About" },

@@ -57,7 +57,7 @@ export default function AboutPage() {
                 We run the expensive version instead. You get one cleaner. They walk your house
                 with you on the first visit and write down what matters. That sheet stays with your
                 home. By the fourth visit they are finding things you never thought to ask for,
-                and the same two hours buys visibly more than it did at the start.
+                and the same visit buys visibly more than it did at the start.
               </p>
               <p>
                 It costs us in scheduling, in sick cover, and in growth: we cannot take a client we

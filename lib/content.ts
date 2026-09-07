@@ -28,9 +28,6 @@ export type Service = {
   name: string;
   shortName: string;
   dek: string;
-  from: number;
-  hours: [number, number];
-  cadence: string;
   forWho: string;
   lede: string;
   body: string[];
@@ -45,9 +42,6 @@ export const services: Service[] = [
     name: "Recurring clean",
     shortName: "Recurring",
     dek: "The one that ends the argument about whose turn it is.",
-    from: 149,
-    hours: [2, 3],
-    cadence: "Weekly, biweekly or monthly",
     forWho: "Households who want it handled and never want to think about it again.",
     lede: "Your cleaner learns your home once, then keeps it. Same person, same day, same standard: the visit you stop having to manage.",
     body: [
@@ -116,7 +110,7 @@ export const services: Service[] = [
     extras: ["Inside the fridge", "Inside the oven", "Interior windows", "Laundry folded"],
     notIncluded: [
       "Exterior windows above ground level",
-      "Carpet steam extraction",
+      "Carpet steam extraction (book the steam carpet clean)",
       "Anything requiring a ladder over six feet",
     ],
   },
@@ -125,14 +119,11 @@ export const services: Service[] = [
     name: "Deep clean",
     shortName: "Deep",
     dek: "For the places a weekly clean politely walks past.",
-    from: 289,
-    hours: [4, 6],
-    cadence: "One visit, once or twice a year",
     forWho: "Homes that have been maintained but not reset, or are about to host.",
     lede: "Everything a recurring clean covers, plus the parts nobody gets to: inside, behind, underneath, and above eye level.",
     body: [
       "A deep clean is not a faster clean with more pressure. It is a different list. Baseboards get washed rather than dusted. Cabinet fronts get degreased at the handles where the finish has gone tacky. Vents come off. Light fixtures come down.",
-      "We book deep cleans in a single unbroken block so nothing is left half-dismantled. If the house needs seven hours, we quote seven hours. We would rather lose the job than start something we have to abandon at five.",
+      "We book deep cleans as a single unbroken block so nothing is left half-dismantled. We quote for the house the job actually needs, not for the visit we would like it to be. We would rather lose the work than start something we have to walk away from half-finished.",
       "Most people book one before a holiday, a viewing, or the first warm week of spring, when the winter's worth of salt and grit finally has somewhere to go.",
     ],
     rooms: [
@@ -196,7 +187,7 @@ export const services: Service[] = [
     extras: ["Interior of a second fridge", "Garage sweep-out", "Balcony wash-down"],
     notIncluded: [
       "Mould remediation",
-      "Post-construction dust (book the move-out clean)",
+      "Post-construction dust (book the post-construction clean)",
       "Pest treatment",
     ],
   },
@@ -205,13 +196,10 @@ export const services: Service[] = [
     name: "Move-in / move-out clean",
     shortName: "Move-in / out",
     dek: "Written against the inspection, not against a general idea of clean.",
-    from: 339,
-    hours: [5, 7],
-    cadence: "One visit, keyed to your possession date",
     forWho: "Anyone with a hard date, an empty house, and a deposit on the line.",
     lede: "An empty home hides nothing. We clean it in the order an inspector walks it, and we finish before your handover, not on the day of it.",
     body: [
-      "Move cleans are the only job we schedule backwards. You tell us when the keys change hands; we book the visit far enough ahead that a problem found at hour five can still be fixed.",
+      "Move cleans are the only job we schedule backwards. You tell us when the keys change hands; we book the visit far enough ahead of that day that a problem found late in the clean can still be fixed.",
       "Empty rooms are unforgiving. Every scuff on a baseboard, every ring inside a cabinet, every drift of dust behind where the fridge stood is visible from the doorway. That is the list we work to.",
       "If you are moving into a place someone else has left, we do the same clean in reverse, and we do it before your furniture arrives, the only time the house will ever be this easy to reach.",
     ],
@@ -276,7 +264,7 @@ export const services: Service[] = [
     extras: ["Garage floor sweep and wash", "Balcony or patio wash-down", "Wall wash, priced by room"],
     notIncluded: [
       "Junk or furniture removal",
-      "Carpet steam extraction",
+      "Carpet steam extraction (book the steam carpet clean)",
       "Repairs and patching of any kind",
     ],
   },
@@ -285,9 +273,6 @@ export const services: Service[] = [
     name: "One-time clean",
     shortName: "One-time",
     dek: "The reset before the guests, or after them.",
-    from: 189,
-    hours: [3, 4],
-    cadence: "Single visit, no commitment",
     forWho: "People who need one very good day and no ongoing arrangement.",
     lede: "A full clean of the whole home with no subscription attached. Book it, watch how it goes, decide about the rest later.",
     body: [
@@ -337,22 +322,265 @@ export const services: Service[] = [
       },
     ],
     extras: ["Inside the fridge", "Inside the oven", "Interior windows"],
-    notIncluded: ["Inside cabinets", "Behind heavy appliances", "Wall washing"],
+    notIncluded: [
+      "Inside cabinets",
+      "Behind heavy appliances",
+      "Wall washing (book wall stain removal)",
+    ],
+  },
+  {
+    slug: "post-construction",
+    name: "Post-construction clean",
+    shortName: "Post-construction",
+    dek: "For the fine grey dust that comes back the day after you sweep.",
+    forWho:
+      "Anyone at the end of a renovation or a new build, standing in a finished room they still cannot use.",
+    lede: "Drywall dust does not come out in one pass. We work top down in stages, let the air settle, then go back over the same surfaces a second time.",
+    body: [
+      "Construction dust is not ordinary dirt. It is ground gypsum and sawdust, light enough to hang in the air for hours, and it is sitting on the top edge of every door frame whether you can see it or not. Sweep once and the room looks finished. Come back in the morning and there is a new film on every flat surface, because everything you disturbed has landed.",
+      "So we do it in passes. First a dry pass from the ceiling down, on vacuums with sealed HEPA filtration rather than brooms, so the dust leaves the room instead of moving around it. Then we stop. Then we wet-wipe the same surfaces in the same order, once what we lifted has had time to fall.",
+      "We do not book this job until the trades have finished and the debris is gone. If the painter is still coming back for a second coat, we schedule you after them, because cleaning ahead of the last trade is money you spend twice.",
+    ],
+    rooms: [
+      {
+        room: "Whole home, first pass",
+        tasks: [
+          "Ceilings, corners and light coves vacuumed of dust and cobweb",
+          "Every door frame, casing and top edge cleared",
+          "Heating registers and cold-air returns vacuumed out",
+          "Window frames, tracks and sills dry-vacuumed before anything wet",
+          "Floors vacuumed on HEPA, edges and expansion gaps included",
+        ],
+      },
+      {
+        room: "Kitchen",
+        tasks: [
+          "New cabinets inside and out, shelves and drawer runners included",
+          "Manufacturer film and adhesive lifted from appliance faces",
+          "Counters, backsplash and grout haze cleared",
+          "Sink, tap and drain flushed of grit",
+          "Under and behind the fridge and range before they are pushed back",
+        ],
+      },
+      {
+        room: "Bathrooms",
+        tasks: [
+          "Grout haze and plaster spots off tile",
+          "Tub, base and shower glass de-dusted, then washed",
+          "Vanity interiors and mirror edges",
+          "Extractor fan cover removed and washed",
+          "Silicone lines wiped free of sanding residue",
+        ],
+      },
+      {
+        room: "Glass and fixtures",
+        tasks: [
+          "Interior glass washed after the dust pass, not before",
+          "Paint flecks lifted from glass where the glazing allows",
+          "Light fixtures, shades and ceiling fan blades",
+          "Switch plates, outlets and thermostat faces",
+        ],
+      },
+      {
+        room: "Floors, final pass",
+        tasks: [
+          "Second HEPA vacuum once the surfaces are done",
+          "Hard floors damp-mopped, water changed room by room",
+          "New carpet vacuumed both directions to lift crushed pile",
+          "Stair treads, risers and nosings by hand",
+        ],
+      },
+      {
+        room: "Garage and entry",
+        tasks: [
+          "Concrete swept and washed of drywall slurry",
+          "Utility and mechanical room floors cleared",
+          "Entry threshold, door glass and hardware",
+          "Exterior stoop swept back to the walkway",
+        ],
+      },
+    ],
+    extras: [
+      "A third dust pass a week later",
+      "Interior of the garage or shop",
+      "Window track detail on new builds",
+      "Steam extraction of new carpet",
+    ],
+    notIncluded: [
+      "Debris, offcut or packaging removal",
+      "Paint touch-up, caulking or any repair",
+      "Anything requiring a ladder over six feet",
+      "Work on a site the trades have not finished",
+    ],
+  },
+  {
+    slug: "steam-carpet",
+    name: "Steam carpet clean",
+    shortName: "Steam carpet",
+    dek: "Hot water extraction, and the drying time it honestly needs.",
+    forWho:
+      "Carpet that vacuums up fine and still looks tired: traffic lanes, pet accidents, a spill that came back.",
+    lede: "We pre-treat, agitate, then extract with hot water under pressure. Most of the skill is in how much water goes in, because nearly everything that goes wrong with a steam clean is a drying problem.",
+    body: [
+      "Carpet goes grey in lanes rather than evenly, and the reason is soil ground down into the base of the pile where a vacuum head cannot reach. Extraction is the only thing that lifts it: hot water and detergent driven in, then pulled straight back out with the soil in it.",
+      "The mistake is over-wetting. Too much water passes the backing into the underlay, takes three days to dry, and carries the old soil back up to the surface as it evaporates. That is why a carpet sometimes looks worse a week after a cheap clean. We make more extraction passes with less water, which takes longer on the day and is the whole difference.",
+      "Expect to stay off it for the rest of the afternoon, and to leave heavy furniture until the following day. We put protectors under every leg we move, and before we start we walk the room with you and say which marks we think will lift and which are dye rather than soil.",
+    ],
+    rooms: [
+      {
+        room: "Before we start",
+        tasks: [
+          "Fibre and backing identified so the water temperature suits them",
+          "Colourfastness tested in a closet",
+          "Every mark walked with you and called honestly",
+          "Small furniture moved, heavy pieces blocked and protected",
+        ],
+      },
+      {
+        room: "Living areas",
+        tasks: [
+          "Dry vacuumed twice, the second pass across the pile",
+          "Traffic lanes pre-sprayed and left to dwell",
+          "Agitated with a counter-rotating brush",
+          "Extracted in overlapping passes, then dry passes to pull the water back",
+          "Pile groomed one direction so it dries standing up",
+        ],
+      },
+      {
+        room: "Bedrooms",
+        tasks: [
+          "Edges and under-window strips worked with a hand tool",
+          "Closet floors extracted where the carpet runs in",
+          "Bed and dresser legs set on protectors",
+          "Full extraction and grooming out to the doorway",
+        ],
+      },
+      {
+        room: "Stairs and hallways",
+        tasks: [
+          "Treads, risers and nosings done one at a time by hand tool",
+          "Landing and turn carpet extracted as a single piece",
+          "Spindle bases and stringer edges detailed",
+          "Extra dry passes on stairs so they are safe to use sooner",
+        ],
+      },
+      {
+        room: "Spots and odour",
+        tasks: [
+          "Pet accidents treated with an enzyme, not a masking scent",
+          "Wicking spots re-extracted after they resurface",
+          "Grease and tannin marks worked with the chemistry each one needs",
+          "Anything that will not lift is shown to you and explained",
+        ],
+      },
+      {
+        room: "Upholstery, if added",
+        tasks: [
+          "Sofa and chair fabric tested, then extracted at low moisture",
+          "Cushions cleaned both faces and stood up to dry",
+          "Arms and headrests, where the body oils sit",
+          "Frames and legs wiped down",
+        ],
+      },
+    ],
+    extras: [
+      "Sofa or sectional",
+      "Area rugs cleaned in place",
+      "Stain protector reapplied",
+      "Air movers for a faster dry",
+    ],
+    notIncluded: [
+      "Carpet repair, restretching or reseaming",
+      "Dye stains, bleach marks and permanent discolouration",
+      "Underlay replacement after flooding",
+      "Any promise that a particular stain will lift",
+    ],
+  },
+  {
+    slug: "wall-stains",
+    name: "Wall stain removal",
+    shortName: "Wall stains",
+    dek: "Scuffs, handprints and crayon off the wall, without the paint coming too.",
+    forWho:
+      "Walls that have taken a few years of family, or a rental that has an inspection next week.",
+    lede: "Paint has a finish, and the finish is what fails first. We test in a corner, start with the gentlest thing that works, and stop before the wall goes patchy.",
+    body: [
+      "Most wall marks come off. The reason people give up is that the first hard scrub leaves a clean patch shinier than everything around it, which looks worse than the mark did. That burnishing is the real risk on any painted wall, and it is why this job is worth doing carefully rather than quickly.",
+      "So we work in order. A dry sponge first, then a neutral cleaner on a soft pad, then something with more bite only where it is needed and only after a test patch behind a door. Flat and matte paint gets the gentlest treatment, because it has the least to give.",
+      "We tell you what we expect before we start. Crayon, scuff marks, furniture rub and the greasy handprints around switches almost always come off. Smoke film, water staining, ink and anything soaked into flat paint often will not, and on those the honest answer is a coat of paint rather than a stronger chemical.",
+    ],
+    rooms: [
+      {
+        room: "Before we start",
+        tasks: [
+          "Paint sheen identified room by room",
+          "Test patch in a low-visibility corner",
+          "Every mark walked with you and called likely or unlikely",
+          "Floors and trim covered before anything wet comes out",
+        ],
+      },
+      {
+        room: "Hallways and stairs",
+        tasks: [
+          "Handprints and shoulder rub down the traffic side",
+          "Scuffs at stroller, suitcase and vacuum height",
+          "Corner beads and door casings where knuckles land",
+          "Light switch surrounds degreased",
+        ],
+      },
+      {
+        room: "Kitchen and dining",
+        tasks: [
+          "Grease film on the wall around the cooktop",
+          "Splatter above the counter run and behind the bin",
+          "Chair-back rub along the dining wall",
+          "The fridge-side wall where hands push past",
+        ],
+      },
+      {
+        room: "Bedrooms and playrooms",
+        tasks: [
+          "Crayon, marker and pencil lifted where the paint allows",
+          "Sticker and tape residue softened off rather than scraped",
+          "Headboard and bedside rub marks",
+          "Scuffs behind doors and along the baseboards",
+        ],
+      },
+      {
+        room: "Bathrooms and laundry",
+        tasks: [
+          "Splash marks and dried product runs",
+          "Hairspray film beside the vanity",
+          "Mildew spotting on paint where the finish allows",
+          "Walls behind and beside the machines",
+        ],
+      },
+      {
+        room: "Finish and hand-back",
+        tasks: [
+          "Cleaned areas feathered out so no patch is left standing",
+          "Trim and baseboards wiped to match",
+          "Floors under the work vacuumed and mopped",
+          "Anything that did not lift photographed and listed for you",
+        ],
+      },
+    ],
+    extras: [
+      "A full wall wash rather than spot work",
+      "Ceilings, where they are reachable",
+      "Doors and trim washed throughout",
+    ],
+    notIncluded: [
+      "Painting, priming or touch-up of any kind",
+      "Patching, filling or drywall repair",
+      "Wallpaper, limewash and unsealed specialty finishes",
+      "Smoke, soot and water damage restoration",
+      "Any promise that a particular stain will come out",
+    ],
   },
 ];
 
 export const serviceBySlug = (slug: string) => services.find((s) => s.slug === slug);
-
-/* Estimate model: illustrative only. Demo figures, not a real price list. */
-export const estimate = (serviceSlug: string, beds: number, baths: number) => {
-  const service = serviceBySlug(serviceSlug);
-  if (!service) return null;
-  const base = service.from;
-  const perBed = { recurring: 22, deep: 44, "move-in-out": 52, "one-time": 28 }[serviceSlug] ?? 25;
-  const perBath = { recurring: 26, deep: 55, "move-in-out": 64, "one-time": 34 }[serviceSlug] ?? 30;
-  const low = base + Math.max(0, beds - 1) * perBed + Math.max(0, baths - 1) * perBath;
-  return { low, high: Math.round((low * 1.22) / 5) * 5 };
-};
 
 /* --------------------------------------------------------------------------
    Cities
@@ -398,7 +626,7 @@ export const cities: City[] = [
     lede: "River valley character homes, Whyte Ave walk-ups, and everything south of the Henday.",
     body: [
       "Edmonton runs colder and longer, and the houses are older on average. That means more original hardwood, more painted trim, and more surfaces that a wet mop will quietly ruin over a year. Our cleaners here are briefed on finish before they are briefed on anything else.",
-      "Winter also means we plan around it. If a visit falls on a day the roads have genuinely gone, we call you the night before and move it, rather than sending someone who arrives an hour late and rushes.",
+      "Winter also means we plan around it. If a visit falls on a day the roads have genuinely gone, we call you the night before and move it, rather than sending someone who arrives late and rushes.",
     ],
     neighbourhoods: [
       "Old Strathcona",
@@ -450,7 +678,7 @@ export const reviews: Review[] = [
     service: "Move-out",
     stars: 5,
     quote:
-      "Possession was Friday at noon. They came Wednesday, which I thought was overkill until they found a problem in the oven that took an extra two hours. Deposit came back in full. On the day itself I would have been sunk.",
+      "Possession was Friday at noon. They came Wednesday, which I thought was overkill until they found a problem in the oven that took most of the afternoon to put right. Deposit came back in full. On the day itself I would have been sunk.",
     months: "Booked March 2025",
   },
   {
@@ -504,7 +732,7 @@ export const reviews: Review[] = [
     service: "Move-in",
     stars: 5,
     quote:
-      "We booked it for the day before the truck came and walking into an empty, actually-clean house was the only calm hour of that entire month.",
+      "We booked it for the day before the truck came and walking into an empty, actually-clean house was the only calm moment of that entire month.",
     months: "Booked August 2025",
   },
   {
@@ -543,6 +771,33 @@ export const reviews: Review[] = [
       "Six months in, the house is at a level I could not hold on my own even when I had time. I stopped tidying before they come, which was the real test.",
     months: "Client for 6 months",
   },
+  {
+    name: "Marc-André T.",
+    where: "Ritchie, Edmonton",
+    service: "Post-construction",
+    stars: 5,
+    quote:
+      "We did the whole main floor and I thought the builder's clean-up was the clean. It was not. They came once when the site was handed over, then again the following week for the dust that was still coming down, which they had told me about in advance and I had not believed.",
+    months: "Booked June 2025",
+  },
+  {
+    name: "Alina K.",
+    where: "Marda Loop, Calgary",
+    service: "Steam carpet",
+    stars: 5,
+    quote:
+      "Two lanes down the hallway that I had written off. She said one would lift and one probably would not, and she was right on both, which is the part I would tell people about. Dry before we needed the room back.",
+    months: "Booked August 2025",
+  },
+  {
+    name: "Jenna R.",
+    where: "Bowness, Calgary",
+    service: "Wall stains",
+    stars: 4,
+    quote:
+      "Crayon, three years of it, gone off the hallway. He was straight with me that the water mark by the window was not coming out with anything he had, so we left it for the painter. I would rather hear that at the start.",
+    months: "Booked May 2025",
+  },
 ];
 
 /* --------------------------------------------------------------------------
@@ -572,11 +827,6 @@ export const faqs: { q: string; a: string; group: string }[] = [
   },
   {
     group: "Money",
-    q: "Why are your prices a range?",
-    a: "Because a three-bedroom bungalow and a three-bedroom infill are not the same job. The starting-at figure covers a one-bedroom; the quote form adds rooms and bathrooms and returns a real number.",
-  },
-  {
-    group: "Money",
     q: "Do you charge by the hour?",
     a: "No. You are quoted for the job. If it takes longer than we estimated, that is our problem to absorb, and it means our estimate was wrong, which is a thing we would like to know about.",
   },
@@ -591,14 +841,9 @@ export const faqs: { q: string; a: string; group: string }[] = [
     a: "Fine, and worth telling us about in the quote, not because it changes the price but because it changes the plan. Tell us where the dog goes during the visit and whether the cat is an escape risk at the front door.",
   },
   {
-    group: "The visit",
-    q: "How long does a visit take?",
-    a: "A recurring clean of an average home runs two to three hours. A deep clean is four to six. A move clean is five to seven and is booked as one unbroken block. Your quote gives the estimate for your home specifically.",
-  },
-  {
     group: "Scheduling",
     q: "How far ahead should I book a move clean?",
-    a: "As soon as you have a possession date. We schedule move cleans at least one full day before handover so that anything found at hour five can still be fixed before the inspection.",
+    a: "As soon as you have a possession date. We schedule move cleans well before handover so that anything found late in the clean can still be fixed before the inspection.",
   },
   {
     group: "Scheduling",
@@ -609,6 +854,26 @@ export const faqs: { q: string; a: string; group: string }[] = [
     group: "Scheduling",
     q: "What if something is not right?",
     a: "Tell us within 48 hours with a photo and your cleaner comes back and redoes that area. Not the whole house, not a credit note. The actual thing, actually fixed.",
+  },
+  {
+    group: "Carpets, walls and renovations",
+    q: "How long does carpet take to dry?",
+    a: "Stay off it for the rest of the afternoon, and leave heavy furniture until the next day. We extract with less water and more passes specifically to keep the drying short, and if you need it back sooner we can leave air movers running.",
+  },
+  {
+    group: "Carpets, walls and renovations",
+    q: "Will the stain actually come out?",
+    a: "Sometimes, and we will tell you which before we start rather than after. Soil, grease, food and most pet accidents lift. Dye, bleach and ink are not dirt sitting on the fibre, they have changed its colour, and no amount of extraction brings that back. We do not promise a result we cannot see coming.",
+  },
+  {
+    group: "Carpets, walls and renovations",
+    q: "Can you clean walls without wrecking the paint?",
+    a: "Usually, and the risk is not the mark, it is burnishing: scrubbing hard enough that the cleaned patch ends up shinier than the wall around it. We test behind a door first, work up from the gentlest method, and stop when the next step would cost you the finish. On flat paint that sometimes means the honest answer is a coat of paint.",
+  },
+  {
+    group: "Carpets, walls and renovations",
+    q: "When should I book the post-construction clean?",
+    a: "After the last trade leaves and the debris is gone, not before. If the painter is coming back for a second coat, book us after them. We also do a lot of these in two visits: one when the site is handed over, and a lighter pass a week later once the dust that was still airborne has finished landing.",
   },
 ];
 
@@ -660,7 +925,7 @@ export const posts: Post[] = [
       {
         h: "What we actually do at the threshold",
         p: [
-          "Our cleaners start at the entry on every visit, before anything else, because a clean entry stops re-contaminating the rooms behind it for the next two hours. It is the least glamorous fifteen minutes of the visit and it decides how the rest of it goes.",
+          "Our cleaners start at the entry on every visit, before anything else, because a clean entry stops re-contaminating the rooms behind it for the rest of the clean. It is the least glamorous part of the visit and it decides how the rest of it goes.",
         ],
       },
     ],
@@ -689,7 +954,7 @@ export const posts: Post[] = [
         h: "A deep clean changes the state",
         p: [
           "Vent covers come off. The range hood filter goes in the sink. Baseboards get washed rather than dusted. That is a real difference, because dusting a baseboard that has six months of kitchen grease on it just relocates the grease.",
-          "Cabinets get emptied at the areas that matter, the fridge comes apart down to the crisper runners, and the oven gets the full two hours it deserves rather than a wipe of the door glass.",
+          "Cabinets get emptied at the areas that matter, the fridge comes apart down to the crisper runners, and the oven gets taken properly apart rather than given a wipe of the door glass.",
         ],
       },
       {
@@ -723,7 +988,7 @@ export const posts: Post[] = [
       {
         h: "Book the clean before the last day",
         p: [
-          "This is the single most useful thing in this article. A move-out clean scheduled the morning of handover has no slack in it. If the oven turns out to be a three-hour job, you find out at the moment you can least afford to.",
+          "This is the single most useful thing in this article. A move-out clean scheduled the morning of handover has no slack in it. If the oven turns out to be a job in its own right, you find out at the moment you can least afford to.",
           "One clear day between the clean and the handover turns a crisis into an errand.",
         ],
       },
@@ -759,7 +1024,7 @@ export const posts: Post[] = [
       {
         h: "One person learns your house in about four visits",
         p: [
-          "After that the same two hours buys noticeably more, because none of it is being spent on orientation. This is the entire economic argument, and it is why we can hold a price without cutting the visit short.",
+          "After that the same visit buys noticeably more, because none of it is being spent on orientation. This is the entire economic argument, and it is why we can hold a quote without cutting the clean short.",
         ],
       },
       {

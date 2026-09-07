@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Aperture } from "@/components/aperture";
 import { Container, Stars } from "@/components/page-parts";
-import { Scale } from "@/components/scale";
+import { ServiceIndex } from "@/components/service-index";
 import { Sweep } from "@/components/sweep";
 import { ArrowRight, Check, Key, Clock } from "@/components/icons";
 import { business, cities, reviews } from "@/lib/content";
@@ -74,8 +74,8 @@ export default function Home() {
               </Link>
             </div>
 
-            <p style={{ "--d": "620ms" } as React.CSSProperties} className="arrive tnum mt-10 border-t border-dusk-700 pt-6 text-[0.9375rem] text-frost-200">
-              From $149 · Fixed price, quoted per job · {business.hours}
+            <p style={{ "--d": "620ms" } as React.CSSProperties} className="arrive mt-10 border-t border-dusk-700 pt-6 text-[0.9375rem] text-frost-200">
+              Quoted per job, never per hour · {business.hours}
             </p>
           </div>
         </Container>
@@ -92,7 +92,7 @@ export default function Home() {
               A rotating crew starts from zero every visit. Where the vacuum lives, which room is
               off limits, that the dining table takes no spray at all: none of it survives to the
               next visit, so you re-explain it, or you stop and quietly watch the standard slide.
-              One person learns your house in about four visits. After that the same two hours buys
+              One person learns your house in about four visits. After that the same visit buys
               noticeably more.
             </p>
           </Aperture>
@@ -111,27 +111,26 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* ------------------------------------------------------------ scale */}
+      {/* ------------------------------------------------------------ index */}
       <section className="py-20 sm:py-24">
         <Container>
           <Aperture>
             <h2 className="font-display display-tight max-w-[16ch] text-4xl leading-[1.04] font-semibold text-frost-100 sm:text-5xl">
-              Four services, one honest scale.
+              Seven services, one list.
             </h2>
             <p className="measure mt-6 text-lg leading-relaxed text-frost-400">
-              Everything is drawn against the same axis so you can see where the money actually
-              goes. These are starting prices for a one-bedroom home; the quote adds your rooms and
-              returns one number.
+              Everything we do, written out plainly so you can find the one that matches the state
+              of your house. Tell us which, and the quote comes back with the number for your home.
             </p>
           </Aperture>
           <div className="mt-14">
-            <Scale />
+            <ServiceIndex />
           </div>
           <Link
-            href="/pricing"
+            href="/services"
             className="mt-10 inline-flex items-center gap-2 text-frost-200 decoration-dusk-600 underline-offset-4 transition-colors duration-300 hover:text-amber-400 hover:decoration-amber-400"
           >
-            How the pricing works
+            What each one includes
             <ArrowRight className="h-4 w-4" />
           </Link>
         </Container>

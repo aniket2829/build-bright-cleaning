@@ -2,7 +2,7 @@
  * THE SWEEP — the hero's one authored moment.
  *
  * Two beats. First a broom crosses the hero from the left and the headline,
- * lede, buttons and price line arrive in its wake (the `.arrive` class in
+ * lede, buttons and footnote arrive in its wake (the `.arrive` class in
  * globals.css, staggered by --d). Then it comes to rest in the open right half
  * and keeps sweeping there, joined by a second, smaller broom on a slower
  * cycle so the two never fall into step.

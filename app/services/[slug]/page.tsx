@@ -16,7 +16,7 @@ export async function generateMetadata(props: PageProps<"/services/[slug]">): Pr
   if (!service) return {};
   return {
     title: service.name,
-    description: `${service.lede} From $${service.from} in Calgary and Edmonton.`,
+    description: `${service.lede} Residential cleaning in Calgary and Edmonton.`,
   };
 }
 
@@ -37,27 +37,21 @@ export default async function ServicePage(props: PageProps<"/services/[slug]">) 
         meta={
           <dl className="flex flex-wrap gap-x-12 gap-y-6 border-t border-dusk-600 pt-7">
             <div>
-              <dt className="text-sm text-frost-400">Starting price</dt>
-              <dd className="tnum font-display mt-1 text-3xl leading-none font-semibold text-frost-100">
-                ${service.from}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-sm text-frost-400">Typical visit</dt>
-              <dd className="tnum font-display mt-1 text-3xl leading-none font-semibold text-frost-100">
-                {service.hours[0]}–{service.hours[1]}h
-              </dd>
-            </div>
-            <div>
               <dt className="text-sm text-frost-400">Checklist</dt>
               <dd className="tnum font-display mt-1 text-3xl leading-none font-semibold text-frost-100">
                 {taskCount} items
               </dd>
             </div>
             <div>
-              <dt className="text-sm text-frost-400">Booked as</dt>
+              <dt className="text-sm text-frost-400">Rooms covered</dt>
+              <dd className="tnum font-display mt-1 text-3xl leading-none font-semibold text-frost-100">
+                {service.rooms.length}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-sm text-frost-400">Quoted as</dt>
               <dd className="font-display mt-1 text-xl leading-tight font-semibold text-frost-100">
-                {service.cadence}
+                A fixed price for the job
               </dd>
             </div>
           </dl>
@@ -83,11 +77,11 @@ export default async function ServicePage(props: PageProps<"/services/[slug]">) 
                   href={`/quote?service=${service.slug}`}
                   className="group mt-7 inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-amber-500 px-6 py-3.5 font-medium text-ink-900 no-underline transition-colors duration-300 hover:bg-amber-400"
                 >
-                  Quote this clean
+                  Quote this job
                   <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
                 <p className="mt-3 text-center text-sm text-ink-500">
-                  Prefilled with {service.shortName.toLowerCase()}.
+                  The form opens on {service.shortName.toLowerCase()}.
                 </p>
               </div>
             </aside>
@@ -167,8 +161,8 @@ export default async function ServicePage(props: PageProps<"/services/[slug]">) 
                     {other.name}
                   </h3>
                   <p className="mt-2 leading-relaxed text-ink-500">{other.dek}</p>
-                  <p className="tnum mt-3 flex items-center gap-2 text-[0.9375rem] font-medium text-ink-900">
-                    From ${other.from}
+                  <p className="mt-3 flex items-center gap-2 text-[0.9375rem] font-medium text-ink-900">
+                    See what it covers
                     <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                   </p>
                 </Link>

@@ -1,31 +1,24 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Container, PageHero } from "@/components/page-parts";
-import { Scale } from "@/components/scale";
 import { ArrowRight } from "@/components/icons";
 import { services } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Recurring, deep, move-in/move-out and one-time house cleaning in Calgary and Edmonton: what each one covers, what it costs to start, and how long it takes.",
+    "Recurring, deep, move-in/move-out, one-time, post-construction, steam carpet cleaning and wall stain removal in Calgary and Edmonton, and exactly what each one covers, room by room.",
 };
 
 export default function ServicesPage() {
   return (
     <>
       <PageHero
-        title="Four services. No packages, no tiers, no upsell script."
+        title="Seven services. No packages, no tiers, no upsell script."
         lede="Every one is quoted as a fixed price for the job. Pick the one that matches the state of your house, and if you pick wrong we will tell you before we start rather than after."
       />
 
-      <section className="warm-side bg-plaster-100 py-20 text-ink-700 sm:py-24">
-        <Container>
-          <Scale tone="warm" />
-        </Container>
-      </section>
-
-      <section className="warm-side bg-plaster-50 pb-24 text-ink-700">
+      <section className="warm-side bg-plaster-50 pt-20 pb-24 text-ink-700 sm:pt-24">
         <Container>
           <ul className="border-t border-plaster-300">
             {services.map((service) => (
@@ -40,10 +33,7 @@ export default function ServicesPage() {
                         {service.name}
                       </Link>
                     </h2>
-                    <p className="tnum mt-3 text-[0.9375rem] text-ink-500">
-                      From ${service.from} · {service.hours[0]}–{service.hours[1]} hours ·{" "}
-                      {service.cadence}
-                    </p>
+                    <p className="mt-3 text-[0.9375rem] text-ink-500">{service.dek}</p>
                   </div>
 
                   <div>
@@ -68,7 +58,7 @@ export default function ServicesPage() {
                       href={`/services/${service.slug}`}
                       className="group mt-8 inline-flex items-center gap-2 font-medium text-ink-900 decoration-plaster-300 underline-offset-4 transition-colors duration-300 hover:decoration-ink-900"
                     >
-                      Everything in a {service.shortName.toLowerCase()} clean
+                      Everything in a {service.name.toLowerCase()}
                       <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                     </Link>
                   </div>

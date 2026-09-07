@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container, PageHero, Prose, Stars } from "@/components/page-parts";
-import { Scale } from "@/components/scale";
+import { ServiceIndex } from "@/components/service-index";
 import { ArrowRight } from "@/components/icons";
 import { cities, cityBySlug, reviews } from "@/lib/content";
 
@@ -16,7 +16,7 @@ export async function generateMetadata(props: PageProps<"/areas/[city]">): Promi
   if (!city) return {};
   return {
     title: `House cleaning in ${city.name}`,
-    description: `${city.lede} Recurring, deep, move-in/out and one-time cleans across ${city.name}, quoted as a fixed price.`,
+    description: `${city.lede} Recurring, deep, move-in/out, one-time and post-construction cleans, steam carpet cleaning and wall stain removal across ${city.name}, quoted as a fixed price.`,
   };
 }
 
@@ -85,13 +85,14 @@ export default async function CityPage(props: PageProps<"/areas/[city]">) {
       <section className="warm-side bg-plaster-50 py-20 text-ink-700 sm:py-24">
         <Container>
           <h2 className="font-display display-tight text-3xl leading-tight font-semibold text-ink-900 sm:text-4xl">
-            What a clean costs in {city.name}
+            What we clean in {city.name}
           </h2>
           <p className="measure mt-5 leading-relaxed text-ink-700">
-            The same prices in both cities. We do not charge more for the harder winter.
+            The same seven services in both cities, quoted the same way. We do not charge more for
+            the harder winter.
           </p>
           <div className="mt-12">
-            <Scale tone="warm" />
+            <ServiceIndex tone="warm" />
           </div>
         </Container>
       </section>

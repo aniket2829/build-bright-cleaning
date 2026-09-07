@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useMemo, useState } from "react";
+import { useActionState, useState } from "react";
 import { submitQuote, type QuoteState } from "@/app/quote/actions";
-import { cities, estimate, services } from "@/lib/content";
+import { cities, services } from "@/lib/content";
 import { ArrowLeft, ArrowRight, Check, Clock } from "@/components/icons";
 
 const STEPS = ["Service", "Your home", "When and where", "You"] as const;
@@ -61,14 +61,6 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
     setDraft((d) => ({ ...d, [key]: value }));
 
   const service = services.find((s) => s.slug === draft.service);
-  const priced = useMemo(
-    () =>
-      draft.service && draft.bedrooms && draft.bathrooms
-        ? estimate(draft.service, draft.bedrooms, draft.bathrooms)
-        : null,
-    [draft.service, draft.bedrooms, draft.bathrooms],
-  );
-
   const sent = state.status === "sent";
 
   const stepValid = (i: number) => {
@@ -89,10 +81,12 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
   const showStepError = touched.includes(`step-${step}`) && !stepValid(step);
 
   /* ---------------------------------------------------------------- ladder */
+  const ready = stepValid(0) && stepValid(1) && stepValid(2);
+
   const ladder: { label: string; done: boolean; active: boolean }[] = [
-    { label: "Started", done: true, active: !priced && !sent },
-    { label: "Priced", done: Boolean(priced), active: Boolean(priced) && !sent },
-    { label: "Booked", done: sent, active: sent },
+    { label: "Started", done: true, active: !ready && !sent },
+    { label: "Ready to send", done: ready, active: ready && !sent },
+    { label: "With us", done: sent, active: sent },
   ];
 
   return (
@@ -127,13 +121,6 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
                 term="Timing"
                 detail={TIMINGS.find((t) => t.value === draft.timing)?.label ?? "Not given"}
               />
-              {state.low ? (
-                <Row
-                  term="Estimate"
-                  detail={`$${state.low}–$${state.high}`}
-                  note="Illustrative. Your quote confirms the real figure."
-                />
-              ) : null}
             </dl>
 
             <p className="mt-10 text-ink-700">
@@ -232,14 +219,6 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
                                 {s.dek}
                               </span>
                             </span>
-                            <span className="tnum shrink-0 text-right">
-                              <span className="font-display block text-lg font-semibold">
-                                ${s.from}
-                              </span>
-                              <span className="block text-sm text-ink-500">
-                                {s.hours[0]}–{s.hours[1]}h
-                              </span>
-                            </span>
                           </label>
                         </li>
                       );
@@ -289,7 +268,7 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
                   </Fieldset>
 
                   {service && service.extras.length > 0 && (
-                    <Fieldset legend="Anything to add?" hint="Optional. Priced with the quote.">
+                    <Fieldset legend="Anything to add?" hint="Optional. Included in the quote.">
                       <div className="flex flex-wrap gap-2">
                         {service.extras.map((extra) => {
                           const on = draft.extras.includes(extra);
@@ -429,7 +408,7 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
                 <p role="alert" className="mt-8 flex items-start gap-2.5 text-pine-800">
                   <span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-pine-600" />
                   {step === 0 && "Pick a service to carry on."}
-                  {step === 1 && "We need bedrooms and bathrooms before we can price anything."}
+                  {step === 1 && "We need bedrooms and bathrooms before we can quote anything."}
                   {step === 2 && "Choose a city and roughly when you need it."}
                   {step === 3 && "We need a name and an email that works."}
                 </p>
@@ -517,8 +496,8 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
                   }`}
                 >
                   {rung.label}
-                  {rung.label === "Priced" && !priced && (
-                    <span className="text-ink-500">, after your home</span>
+                  {rung.label === "Ready to send" && !ready && (
+                    <span className="text-ink-500">, once we have your details</span>
                   )}
                 </span>
               </li>
@@ -549,22 +528,15 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
           </dl>
 
           <div className="mt-6 border-t border-plaster-300 pt-6">
-            {priced ? (
-              <>
-                <p className="text-sm text-ink-500">Estimate for this home</p>
-                <p className="tnum font-display mt-1 text-4xl leading-none font-semibold text-ink-900">
-                  ${priced.low}
-                  <span className="text-ink-500">–</span>${priced.high}
-                </p>
-                <p className="mt-3 text-sm leading-relaxed text-ink-500">
-                  Illustrative figure from the answers so far. Your quote confirms one number, and
-                  that number is what you pay.
-                </p>
-              </>
+            {ready ? (
+              <p className="text-[0.9375rem] leading-relaxed text-ink-500">
+                That is everything we need. A person reads this and comes back with one number: a
+                fixed price for the job, and the price you pay.
+              </p>
             ) : (
               <p className="text-[0.9375rem] leading-relaxed text-ink-500">
-                Tell us the service and the size of your home and an estimate appears here before
-                you send anything.
+                Tell us the service, the size of your home and roughly when. A person prices it by
+                hand and comes back with one number.
               </p>
             )}
           </div>

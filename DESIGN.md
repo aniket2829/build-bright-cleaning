@@ -150,11 +150,11 @@ The two rejected worlds are on the record: the aqua-bubbles-and-sparkles cleanin
 A temperature ramp with a single accent: cold blue-black outside, warm off-white inside, one lamp amber, and a dark winter-yard green used only for quiet emphasis on the warm side.
 
 ### Primary
-- **Lamp Amber** (`amber-500`): the action colour. Primary buttons, the focus ring, the browser accent and caret, the selection highlight on the dusk side, the wordmark glyph in the header, the price dot on the Scale, the completed rungs of the quote ladder, and the light in the bloom and broom trace. It is the only saturated colour in the system.
+- **Lamp Amber** (`amber-500`): the action colour. Primary buttons, the focus ring, the browser accent and caret, the selection highlight on the dusk side, the wordmark glyph in the header, the completed rungs of the quote ladder, and the light in the bloom and broom trace. It is the only saturated colour in the system.
 - **Lamp Amber Lifted** (`amber-400`): the hover state of every amber button, and the only form in which amber carries text — as link/hover text on the dusk ground, never on plaster.
 
 ### Secondary
-- **Winter Yard** (`pine-800`, with `pine-600` for its lighter mark): warm-side quiet emphasis only — step numerals in the "three steps" ordinal list, the hover colour of warm-side headings and Scale rows, the checkmarks in room lists, and inline form/validation errors. It is deliberately not a second accent; it never appears on the dusk ground and never on a control.
+- **Winter Yard** (`pine-800`, with `pine-600` for its lighter mark): warm-side quiet emphasis only — step numerals in the "three steps" ordinal list, the hover colour of warm-side headings and Service Index rows, the checkmarks in room lists, and inline form/validation errors. It is deliberately not a second accent; it never appears on the dusk ground and never on a control.
 
 ### Neutral — outside (dusk)
 - **Winter Dusk** (`dusk-800`): the document ground; the colour of the street.
@@ -170,7 +170,7 @@ Four ramp steps are declared in `app/globals.css` and currently unused — `dusk
 
 ### Named Rules
 
-**The Temperature Rule.** A section's ground says where the reader is in the walk. Dusk grounds are the street: hero, page heroes, the 404, anything before the argument lands. Plaster grounds are inside: how-it-works, proof, prices, forms, long-form reading, and the whole footer. Cross once per page, forwards, and never alternate back and forth.
+**The Temperature Rule.** A section's ground says where the reader is in the walk. Dusk grounds are the street: hero, page heroes, the 404, anything before the argument lands. Plaster grounds are inside: how-it-works, proof, service detail, forms, long-form reading, and the whole footer. Cross once per page, forwards, and never alternate back and forth.
 
 **The Warm-Side Rule.** Any element painted on plaster must carry the `.warm-side` class on its section (or an ancestor). That class is not cosmetic: it flips `color-scheme` to light and re-tints the scrollbar and `::selection` so the browser's own surfaces stay legible against the warm ground. A plaster section without `.warm-side` is a bug, not a variant. See `app/globals.css` and every `warm-side` section in `app/`.
 
@@ -191,17 +191,17 @@ Four ramp steps are declared in `app/globals.css` and currently unused — `dusk
 - **Display** (600, `3.25rem`/`0.98` rising to `4.5rem` at `sm`): the home hero headline only. Always `.display-tight` (-0.028em, `text-wrap: balance`).
 - **Page headline** (600, `3rem` → `3.75rem` → `4.5rem` across `sm`/`lg`, leading `1.02`, max `18ch`): the `PageHero` h1 on every interior route.
 - **Section headline** (600, `2.25rem` → `3rem` at `sm`, leading `1.04`, capped at 14–20ch): every `h2`. Always `.display-tight`.
-- **Title** (600, `1.5rem`, leading `1.25`): card, list-item, accordion and panel headings; also the Scale's service names at `1.25rem`.
+- **Title** (600, `1.5rem`, leading `1.25`): card, list-item, accordion and panel headings; also the Service Index's service names at `1.25rem`.
 - **Lede** (400, `1.25rem` → `1.5rem` at `sm`, leading relaxed): the paragraph directly under an h1.
 - **Body** (400, `1.125rem`, leading relaxed, `.measure` = 68ch): the reading paragraph, set by `Prose` on the warm side.
 - **Fine** (400, `0.9375rem`): meta lines, nav links, footer links, hints, attributions. The system's most common small size — `text-sm` (0.875rem) is reserved for labels and the footer's legal line.
-- **Label** (600, `0.875rem`, `tracking-wide`, uppercase): the only uppercase in the system. Used for column heads and panel titles — the Scale's "Starting price", pricing table headers, footer column titles, the quote summary's "Your request". Five places, and it should stay that few.
+- **Label** (600, `0.875rem`, `tracking-wide`, uppercase): the only uppercase in the system. Used for column heads and panel titles — the Service Index's "What we do", the city page's "Neighbourhoods we work in", footer column titles, the quote summary's "Your request". Four places, and it should stay that few.
 
 ### Named Rules
 
-**The Serif-For-Claims Rule.** Vollkorn carries claims, names, and numbers-as-figures (headlines, prices, step numerals, pull quotes). Schibsted Grotesk carries explanation, navigation and controls. A serif button or a grotesque h2 is off-system.
+**The Serif-For-Claims Rule.** Vollkorn carries claims, names, and numbers-as-figures (headlines, checklist counts, step numerals, pull quotes). Schibsted Grotesk carries explanation, navigation and controls. A serif button or a grotesque h2 is off-system.
 
-**The Tabular Rule.** Any number a reader might compare or scan — prices, phone numbers, hours, room counts, step ordinals, reference codes, tick labels — carries `.tnum`. Figures that align in a column but jitter between rows are the defect this rule exists to prevent.
+**The Tabular Rule.** Any number a reader might compare or scan — phone numbers, trading hours, checklist and room counts, step ordinals, reference codes — carries `.tnum`. Figures that align in a column but jitter between rows are the defect this rule exists to prevent.
 
 **The Measure Rule.** Running prose is capped by `.measure` (68ch); headlines are capped in `ch` on the element (`max-w-[14ch]` to `max-w-[20ch]`) so they break where the sense breaks. No paragraph runs the full 86rem container.
 
@@ -211,7 +211,7 @@ One container, one rhythm. `Container` (`components/page-parts.tsx`) is `max-wid
 
 Vertical rhythm is sectional: `5rem` top and bottom, opening to `6rem`–`7rem` at `sm`. Interior pages open with `PageHero` (`3.5rem` top, `5rem` bottom, `5rem`/`7rem` at `sm`). Within a section the stack is `mt-5`/`mt-7` under a heading, `mt-14`/`mt-16` before the section's content block, `mt-10`/`mt-12` before its closing action.
 
-The grid is content-shaped rather than a fixed column system. The recurring forms are: a three-up ruled list (`sm:grid-cols-3`, `gap-x-10 gap-y-12`, each item opening with a top rule); a two-up warm split; a reading-plus-aside split (`lg:grid-cols-[1fr_23rem]` on the quote, with the aside sticky at `top-28`); and the Scale's three-track row (`sm:grid-cols-[12.5rem_1fr_7.5rem]`) which collapses to a single stacked column below `sm`.
+The grid is content-shaped rather than a fixed column system. The recurring forms are: a three-up ruled list (`sm:grid-cols-3`, `gap-x-10 gap-y-12`, each item opening with a top rule); a two-up warm split; a reading-plus-aside split (`lg:grid-cols-[1fr_23rem]` on the quote, with the aside sticky at `top-28`); and the Service Index's three-track row (`sm:grid-cols-[16rem_1fr_auto]`) which collapses to a single stacked column below `sm`.
 
 Breakpoints in use are Tailwind's `sm` (640px), `md` (768px), and `lg` (1024px). Two behavioural cutoffs matter: navigation collapses to the sheet menu below `lg`, and the hero brooms are hidden entirely below `768px` (a full-width mobile text column leaves no gutter to sweep, and a broom cropped to a sliver of handle is worse than none). Wide tables scroll inside their own bleed-and-restore wrapper (`-mx-5 overflow-x-auto px-5 sm:mx-0`) rather than shrinking type.
 
@@ -275,24 +275,24 @@ Borders are always 1px and always drawn from the ground's own ramp. The icon lan
 - Below `lg`: a round bordered icon button toggles a full-width `dusk-900` sheet of display-serif links at `1.25rem`, each on a `dusk-800` hairline, with the amber quote button and the phone number pinned at its foot. Body scroll locks while open.
 - The footer is the inverse: the same navigation content on `plaster-100`, in four link columns under uppercase labels, opening with a full-width quote CTA band.
 
-### The Scale (signature)
-`components/scale.tsx` — one ruled `$0–$400` graticule that every service is drawn against, so four services are comparable at a glance instead of sitting in four disconnected cards. Each row is a link: name and hour range on the left, the axis in the middle (five 1px ticks at $0/100/200/300/400 at 45% opacity, a full-width hairline, a 2px bar to the service's `from` value, and an `amber-500` dot at its end), the price as a display-serif figure on the right. Hover turns the bar amber and scales the dot to 125%. It has a `tone` prop (`dark` | `warm`) that swaps the entire ramp — rules, labels, fills and hover colour — so the same component works on both sides of the threshold. Any new price comparison belongs on this scale, not in a new chart.
+### The Service Index (signature)
+`components/service-index.tsx` — one ruled list that all seven services sit on, in one order, so they are comparable at a glance instead of sitting in seven disconnected cards. Each row is a link: the service name in display serif on the left, its dek in the muted label colour in the middle, an arrow on the right that translates 4px on hover. It has a `tone` prop (`dark` | `warm`) that swaps the entire ramp — rules, labels and hover colour — so the same component works on both sides of the threshold. It carries no prices and no durations, by product decision: the site names no figure anywhere, and the quote form is the only route to one. Any new service comparison belongs on this list, not in a new card grid.
 
 ### Rooms (signature)
 `components/rooms.tsx` — a single-open accordion, warm side only, first row open on arrival so the pattern is legible before anyone touches it. Closed rows hold as quiet `ink-500` lines with an item count and a chevron; the open row resolves to `ink-900` and reveals a two-column task list with `pine-600` checkmarks. Full `aria-expanded`/`aria-controls` wiring; clicking the open row closes it.
 
 ### Quote form (signature)
-`components/quote-form.tsx` — four steps (Service / Your home / When and where / You) with a pill step-rail whose current step inverts to `ink-900`; completed steps are re-clickable, future steps disabled. Every answer travels as a hidden input regardless of the step it was given on. Beside it sits the sticky summary panel with the named **state ladder** — Started / Priced / Booked — drawn as three dots on a connecting line that fill `amber-500` as they complete, above a definition list and a live estimate range in display serif. Validation is per-step and only speaks after a failed advance.
+`components/quote-form.tsx` — four steps (Service / Your home / When and where / You) with a pill step-rail whose current step inverts to `ink-900`; completed steps are re-clickable, future steps disabled. Every answer travels as a hidden input regardless of the step it was given on. Beside it sits the sticky summary panel with the named **state ladder** — Started / Ready to send / With us — drawn as three dots on a connecting line that fill `amber-500` as they complete, above a definition list of the answers so far. It shows no figure: there is no live estimate, because the site quotes no numbers. Validation is per-step and only speaks after a failed advance.
 
 ### Motion inventory
 
 Three named devices, and no fourth. All are defined in `app/globals.css` and all are dropped entirely under `prefers-reduced-motion` (which also clamps every transition to `0.01ms`).
 
-- **The Sweep** (`components/sweep.tsx`, `.broom-*`): the hero's authored moment, pure CSS with no JavaScript, so there is no hydration flash and `both` fill leaves every element in its finished state. Beat one — a broom crosses from the left over 1200ms on `--ease-threshold` while the headline, lede, buttons and price line arrive behind it (`.arrive`, 720ms, staggered by a per-element `--d` of 230/370/500/620ms). Beat two — it settles into the open right half and keeps sweeping on a 5600ms arc, joined at 1250ms by a smaller, 75%-opacity broom on a 7400ms cycle so the two never fall into step. The bristles splay and settle on the same cycle; a soft amber `broom-trace` marks the ground it just passed over. Hidden below 768px. The mark itself is drawn flat and exact — a tapered handle, a ferrule, and 24 individual bristle strokes generated from one curve — never shaded, never in perspective.
+- **The Sweep** (`components/sweep.tsx`, `.broom-*`): the hero's authored moment, pure CSS with no JavaScript, so there is no hydration flash and `both` fill leaves every element in its finished state. Beat one — a broom crosses from the left over 1200ms on `--ease-threshold` while the headline, lede, buttons and footnote arrive behind it (`.arrive`, 720ms, staggered by a per-element `--d` of 230/370/500/620ms). Beat two — it settles into the open right half and keeps sweeping on a 5600ms arc, joined at 1250ms by a smaller, 75%-opacity broom on a 7400ms cycle so the two never fall into step. The bristles splay and settle on the same cycle; a soft amber `broom-trace` marks the ground it just passed over. Hidden below 768px. The mark itself is drawn flat and exact — a tapered handle, a ferrule, and 24 individual bristle strokes generated from one curve — never shaded, never in perspective.
 - **The Aperture** (`components/aperture.tsx`, `@keyframes aperture-open`): arrival by widening light rather than a fade — 1100ms on `--ease-threshold`, from `clip-path: inset(0 42% 0 42%)` with a 10px blur to fully open. Content already on screen at mount opens without arming, so nothing flashes.
 - **The Warming Scroll** (`components/warming.tsx`): the `--warmth` root property, described under Elevation & Depth.
 
-Everything else is a state transition: 300ms on colour and transform for controls and links, 400–500ms for the chevron, the header material, and the Scale's bar. The house easing is `--ease-threshold` (`cubic-bezier(0.16, 1, 0.3, 1)`) for arrivals; state changes use the default ease.
+Everything else is a state transition: 300ms on colour and transform for controls and links, 400–500ms for the chevron, the header material, and the ladder's dots and connectors. The house easing is `--ease-threshold` (`cubic-bezier(0.16, 1, 0.3, 1)`) for arrivals; state changes use the default ease.
 
 ## Do's and Don'ts
 
@@ -305,7 +305,7 @@ Everything else is a state transition: 300ms on colour and transform for control
 - **Do** cap headlines in `ch` (14–20ch) and keep `.display-tight` on every Vollkorn headline.
 - **Do** read `--warmth` when a new element should respond to depth-in-the-walk, rather than adding a second scroll listener.
 - **Do** draw new icons on the existing 24px grid at 1.5 stroke with `currentColor`, round caps and joins.
-- **Do** reach for `Container`, `PageHero`, `Prose`, `Stars`, `Scale`, `Rooms` and `Aperture` before writing a new layout primitive.
+- **Do** reach for `Container`, `PageHero`, `Prose`, `Stars`, `ServiceIndex`, `Rooms` and `Aperture` before writing a new layout primitive.
 - **Do** gate every animation behind `prefers-reduced-motion` and leave the finished composition visible when it is off — the `Aperture` renders visible and only arms itself once JS confirms motion is wanted.
 
 ### Don't:
@@ -314,7 +314,7 @@ Everything else is a state transition: 300ms on colour and transform for control
 - **Don't** introduce a second accent hue. `pine-800`/`pine-600` are warm-side emphasis and the error colour, not a second brand colour, and they never appear on dusk.
 - **Don't** use pure white or pure black for text. Dusk-side text is `frost-100`/`frost-200`/`frost-400`; warm-side text is `ink-900`/`ink-700`/`ink-500`.
 - **Don't** turn a ruled list into a bordered card. Radius belongs to controls, fields and the two plaster panels; reading structure stays square and ruled.
-- **Don't** apply `Aperture` as a blanket entrance on every section — it is for threshold moments only (the promise, the scale, the quote entry).
+- **Don't** apply `Aperture` as a blanket entrance on every section — it is for threshold moments only (the promise, the service index, the quote entry).
 - **Don't** add photography, gradients with visible edges, sparkles, bubbles, or a teal/mint/sage tint. The media language is authored flat SVG.
 - **Don't** add uppercase type outside the five column-head and panel-title contexts already using it.
 - **Don't** use red for errors; the system's alarm colour is `pine-800`.
