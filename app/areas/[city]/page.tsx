@@ -88,7 +88,7 @@ export default async function CityPage(props: PageProps<"/areas/[city]">) {
             What we clean in {city.name}
           </h2>
           <p className="measure mt-5 leading-relaxed text-ink-700">
-            The same seven services in both cities, quoted the same way. We do not charge more for
+            The same seven services across the city, quoted the same way. We do not charge more for
             the harder winter.
           </p>
           <div className="mt-12">

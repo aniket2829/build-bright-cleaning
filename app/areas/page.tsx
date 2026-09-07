@@ -7,15 +7,15 @@ import { cities } from "@/lib/content";
 export const metadata: Metadata = {
   title: "Where we clean",
   description:
-    "Build Bright cleans homes across Calgary and Edmonton: the neighbourhoods we cover and how quickly a quote comes back in each city.",
+    "Build Bright cleans homes across Edmonton: the neighbourhoods we cover and how quickly a quote comes back.",
 };
 
 export default function AreasPage() {
   return (
     <>
       <PageHero
-        title="Two cities, and we say no to the rest."
-        lede="We only take work where we can hold the same cleaner on the same schedule. That keeps the map small on purpose: Calgary and Edmonton, and nothing we cannot cover properly."
+        title="One city, and we say no to the rest."
+        lede="We only take work where we can hold the same cleaner on the same schedule. That keeps the map small on purpose: Edmonton, and nothing we cannot cover properly."
       />
 
       <section className="warm-side bg-plaster-100 pt-20 pb-24 text-ink-700 sm:pt-24">

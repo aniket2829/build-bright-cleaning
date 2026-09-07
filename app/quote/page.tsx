@@ -6,7 +6,7 @@ import { business } from "@/lib/content";
 export const metadata: Metadata = {
   title: "Get a quote",
   description:
-    "Four questions, about two minutes, and a fixed price for your home in Calgary or Edmonton. No account, no call required.",
+    "A few short steps, about three minutes, and a fixed price for your home in Edmonton. No account, no call required.",
 };
 
 export default async function QuotePage(props: PageProps<"/quote">) {
@@ -17,7 +17,7 @@ export default async function QuotePage(props: PageProps<"/quote">) {
   return (
     <>
       <PageHero
-        title="Four questions. About two minutes."
+        title="A few questions. About three minutes."
         lede="Enough to price the job properly, and not one field more. A person reads it and comes back with one number: the number you pay."
         meta={
           <p className="tnum text-[0.9375rem] text-frost-400">

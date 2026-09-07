@@ -9,8 +9,9 @@ Work top to bottom before this site is used commercially.
 | What | Where | Note |
 |---|---|---|
 | Business name | `lib/content.ts` → `business.name` | Also in `app/layout.tsx` metadata and the footer wordmark. |
-| Phone number | `lib/content.ts` → `business.phoneDisplay` / `phoneHref` | **(403) 555-0148 is a reserved fictional number.** It appears in the header, footer, FAQ, About and quote pages. |
-| Email | `lib/content.ts` → `business.email` | |
+| Phone number | `lib/content.ts` → `business.phoneDisplay` / `phoneHref` | Set to **(825) 963-3038**. It appears in the header, footer, FAQ, About and quote pages. |
+| Email | `lib/content.ts` → `business.email` | Set to **navneetlotey2000@gmail.com**. This is the destination for quote enquiries, but nothing is wired to send there yet — see § 6. |
+| Coverage | `lib/content.ts` → `business.cities` and `cities` | **Edmonton only.** Calgary was removed from the coverage list, the city pages, the reviews and every page's copy. Adding a second city is a content change in `cities`; the home page grid and `/areas` already adapt. |
 | Trading hours | `lib/content.ts` → `business.hours` | |
 | Domain | `app/layout.tsx` → `metadataBase` | Currently `https://buildbright.example`. |
 | Logo | `components/icons.tsx` → `Mark` | Authored SVG glyph (a doorway with light crossing the threshold). Replace or keep deliberately. |
@@ -50,7 +51,19 @@ The same applies to: fixed per-job pricing (not hourly), the two-day notice poli
 
 ## 6. The quote form
 
-`app/quote/actions.ts` validates the answers and returns a reference, then stops. **Nothing is sent anywhere.** Wire `submitQuote` to your real destination (inbox, CRM, database) before taking traffic, and add spam protection at the same time.
+`app/quote/actions.ts` validates the answers and returns a reference, then stops. **Nothing is sent anywhere, including to `business.email`.** Wire `submitQuote` to your real destination (inbox, CRM, database) before taking traffic, and add spam protection at the same time.
+
+The form now collects, and `submitQuote` now validates:
+
+| Field | Notes |
+|---|---|
+| Service, bedrooms, bathrooms, pets, extras | As before. |
+| `address1`, `address2`, `addressCity`, `region`, `postal` | Service address. `addressCity` defaults to Edmonton and `region` to Alberta; `postal` is validated against the Canadian format. |
+| `schedule` | One of `one-time`, `weekly`, `every-2-weeks`, `every-3-weeks`, `monthly`. Required. |
+| `date`, `timeSlot` | Both optional. The date comes from the themed picker in `components/date-picker.tsx` (past dates disabled, local `YYYY-MM-DD`); `timeSlot` is `morning`, `afternoon` or `evening`. |
+| `access`, `name`, `email`, `phone` | As before. |
+
+**The picked date and time are a preference, not a booking.** The form says so, and the confirmation says so. If you later make it a real booking, it needs availability behind it, or the promise stops being true.
 
 ## 7. Imagery
 

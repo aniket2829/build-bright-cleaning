@@ -12,7 +12,7 @@ export function SiteFooter() {
               Get a real number for your home.
             </h2>
             <p className="measure mt-4 text-lg leading-relaxed text-ink-700">
-              Four questions, about two minutes. We come back with a price for the job, not an
+              A few questions, about three minutes. We come back with a price for the job, not an
               hourly rate that moves.
             </p>
           </div>
@@ -34,7 +34,7 @@ export function SiteFooter() {
               </span>
             </div>
             <p className="mt-4 max-w-[30ch] text-[0.9375rem] leading-relaxed text-ink-500">
-              Residential cleaning in Calgary and Edmonton. One cleaner, the same one, every time.
+              Residential cleaning in Edmonton. One cleaner, the same one, every time.
             </p>
             <a
               href={`tel:${business.phoneHref}`}
@@ -79,7 +79,7 @@ export function SiteFooter() {
 
         <div className="mt-16 flex flex-col gap-3 border-t border-plaster-300 pt-8 text-sm text-ink-500 sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {new Date().getFullYear()} {business.name}. Calgary &amp; Edmonton, Alberta.
+            © {new Date().getFullYear()} {business.name}. Edmonton, Alberta.
           </p>
           <p className="max-w-[52ch] sm:text-right">
             Demonstration site. Company details, reviews and contact information are written for

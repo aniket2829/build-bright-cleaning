@@ -4,16 +4,27 @@ import Link from "next/link";
 import { useActionState, useState } from "react";
 import { submitQuote, type QuoteState } from "@/app/quote/actions";
 import { cities, services } from "@/lib/content";
+import { DatePicker } from "@/components/date-picker";
 import { ArrowLeft, ArrowRight, Check, Clock } from "@/components/icons";
 
-const STEPS = ["Service", "Your home", "When and where", "You"] as const;
+const STEPS = ["Service", "Your home", "Address", "Schedule", "You"] as const;
 
-const TIMINGS = [
-  { value: "this-week", label: "This week" },
-  { value: "next-two-weeks", label: "In the next two weeks" },
-  { value: "this-month", label: "Sometime this month" },
-  { value: "planning", label: "Just planning ahead" },
+export const SCHEDULES = [
+  { value: "one-time", label: "One time", note: "A single visit, priced on its own." },
+  { value: "weekly", label: "Weekly", note: "Same day, same cleaner, every week." },
+  { value: "every-2-weeks", label: "Every 2 weeks", note: "The most common choice." },
+  { value: "every-3-weeks", label: "Every 3 weeks", note: "For a house that holds well." },
+  { value: "monthly", label: "Monthly", note: "A reset rather than upkeep." },
 ];
+
+export const TIME_SLOTS = [
+  { value: "morning", label: "Morning", note: "8am – 12pm" },
+  { value: "afternoon", label: "Afternoon", note: "12pm – 4pm" },
+  { value: "evening", label: "Evening", note: "4pm – 7pm" },
+];
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const POSTAL_RE = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
 
 type Draft = {
   service: string;
@@ -21,14 +32,23 @@ type Draft = {
   bathrooms: number;
   pets: string;
   extras: string[];
+  address1: string;
+  address2: string;
+  addressCity: string;
+  region: string;
+  postal: string;
   city: string;
-  timing: string;
+  schedule: string;
   date: string;
+  timeSlot: string;
   access: string;
   name: string;
   email: string;
   phone: string;
 };
+
+// Only one coverage city today, so the quote is stamped with it rather than asked.
+const ONLY_CITY = cities[0];
 
 const EMPTY: Draft = {
   service: "",
@@ -36,9 +56,15 @@ const EMPTY: Draft = {
   bathrooms: 0,
   pets: "",
   extras: [],
-  city: "",
-  timing: "",
+  address1: "",
+  address2: "",
+  addressCity: ONLY_CITY?.name ?? "",
+  region: "Alberta",
+  postal: "",
+  city: ONLY_CITY?.slug ?? "",
+  schedule: "",
   date: "",
+  timeSlot: "",
   access: "",
   name: "",
   email: "",
@@ -49,7 +75,7 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
   const [draft, setDraft] = useState<Draft>({
     ...EMPTY,
     service: services.some((s) => s.slug === initialService) ? initialService : "",
-    city: cities.some((c) => c.slug === initialCity) ? initialCity : "",
+    city: cities.some((c) => c.slug === initialCity) ? initialCity : EMPTY.city,
   });
   const [step, setStep] = useState(0);
   const [touched, setTouched] = useState<string[]>([]);
@@ -61,13 +87,21 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
     setDraft((d) => ({ ...d, [key]: value }));
 
   const service = services.find((s) => s.slug === draft.service);
+  const schedule = SCHEDULES.find((s) => s.value === draft.schedule);
+  const slot = TIME_SLOTS.find((t) => t.value === draft.timeSlot);
   const sent = state.status === "sent";
 
   const stepValid = (i: number) => {
     if (i === 0) return Boolean(draft.service);
     if (i === 1) return draft.bedrooms > 0 && draft.bathrooms > 0;
-    if (i === 2) return Boolean(draft.city && draft.timing);
-    return draft.name.trim().length > 1 && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(draft.email);
+    if (i === 2)
+      return (
+        draft.address1.trim().length > 2 &&
+        draft.addressCity.trim().length > 1 &&
+        POSTAL_RE.test(draft.postal.trim())
+      );
+    if (i === 3) return Boolean(draft.schedule);
+    return draft.name.trim().length > 1 && EMAIL_RE.test(draft.email);
   };
 
   const next = () => {
@@ -81,13 +115,25 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
   const showStepError = touched.includes(`step-${step}`) && !stepValid(step);
 
   /* ---------------------------------------------------------------- ladder */
-  const ready = stepValid(0) && stepValid(1) && stepValid(2);
+  const ready = stepValid(0) && stepValid(1) && stepValid(2) && stepValid(3);
 
   const ladder: { label: string; done: boolean; active: boolean }[] = [
     { label: "Started", done: true, active: !ready && !sent },
     { label: "Ready to send", done: ready, active: ready && !sent },
     { label: "With us", done: sent, active: sent },
   ];
+
+  // The city and region are pre-filled, so an address only counts once the street is given.
+  const addressLine = draft.address1.trim()
+    ? [draft.address1.trim(), draft.addressCity.trim(), draft.postal.trim()]
+        .filter(Boolean)
+        .join(", ")
+    : "";
+
+  // The cadence has its own row, so this one carries only the appointment itself.
+  const whenLine = [draft.date ? longDate(draft.date) : null, slot?.label]
+    .filter(Boolean)
+    .join(" · ");
 
   return (
     <div className="grid gap-12 lg:grid-cols-[1fr_23rem] lg:gap-16">
@@ -105,21 +151,24 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
               Your reference is{" "}
               <strong className="tnum font-semibold text-ink-900">{state.reference}</strong>. A
               real person reads this, not an autoresponder, and comes back to{" "}
-              <strong className="font-medium text-ink-900">{draft.email}</strong>{" "}
-              {draft.city === "calgary" ? "the same working day" : "within one working day"} with a
-              fixed price for the job.
+              <strong className="font-medium text-ink-900">{draft.email}</strong> within one
+              working day with a fixed price for the job.
             </p>
 
             <dl className="mt-10 border-t border-plaster-300">
               <Row term="Service" detail={service?.name ?? "Not given"} />
               <Row term="Home" detail={`${draft.bedrooms} bed · ${draft.bathrooms} bath`} />
+              <Row term="Address" detail={addressLine || "Not given"} />
+              <Row term="Schedule" detail={schedule?.label ?? "Not given"} />
               <Row
-                term="Where"
-                detail={cities.find((c) => c.slug === draft.city)?.name ?? "Not given"}
-              />
-              <Row
-                term="Timing"
-                detail={TIMINGS.find((t) => t.value === draft.timing)?.label ?? "Not given"}
+                term="Appointment"
+                detail={
+                  draft.date
+                    ? `${longDate(draft.date)}${slot ? ` · ${slot.label}` : ""}`
+                    : slot
+                      ? `${slot.label}, date to confirm`
+                      : "We will suggest times"
+                }
               />
             </dl>
 
@@ -171,10 +220,20 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
               <input type="hidden" name="pets" value={draft.pets} />
               <input type="hidden" name="extras" value={draft.extras.join(", ")} />
               <input type="hidden" name="city" value={draft.city} />
-              <input type="hidden" name="timing" value={draft.timing} />
+              <input type="hidden" name="schedule" value={draft.schedule} />
               <input type="hidden" name="date" value={draft.date} />
-              <input type="hidden" name="access" value={draft.access} />
-              {step < 3 && (
+              <input type="hidden" name="timeSlot" value={draft.timeSlot} />
+              {step !== 2 && (
+                <>
+                  <input type="hidden" name="address1" value={draft.address1} />
+                  <input type="hidden" name="address2" value={draft.address2} />
+                  <input type="hidden" name="addressCity" value={draft.addressCity} />
+                  <input type="hidden" name="region" value={draft.region} />
+                  <input type="hidden" name="postal" value={draft.postal} />
+                </>
+              )}
+              {step !== 3 && <input type="hidden" name="access" value={draft.access} />}
+              {step < 4 && (
                 <>
                   <input type="hidden" name="name" value={draft.name} />
                   <input type="hidden" name="email" value={draft.email} />
@@ -306,40 +365,173 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
               )}
 
               {step === 2 && (
+                <Fieldset
+                  legend="Service address"
+                  hint={`Where the clean happens. We work in ${ONLY_CITY?.name ?? "Edmonton"} and nowhere else, so the postcode is how we check we can cover you.`}
+                >
+                  <div className="flex flex-col gap-6">
+                    <Field label="Address line 1" id="address1" error={state.errors?.address1}>
+                      <input
+                        id="address1"
+                        name="address1"
+                        autoComplete="address-line1"
+                        placeholder="Street 1"
+                        value={draft.address1}
+                        onChange={(e) => set("address1", e.target.value)}
+                        className={inputClass}
+                      />
+                    </Field>
+
+                    <Field label="Address line 2" hint="Optional. Unit, buzzer, or building." id="address2">
+                      <input
+                        id="address2"
+                        name="address2"
+                        autoComplete="address-line2"
+                        placeholder="Street 2"
+                        value={draft.address2}
+                        onChange={(e) => set("address2", e.target.value)}
+                        className={inputClass}
+                      />
+                    </Field>
+
+                    <div className="grid gap-6 sm:grid-cols-2">
+                      <Field label="City / Town" id="addressCity" error={state.errors?.addressCity}>
+                        <input
+                          id="addressCity"
+                          name="addressCity"
+                          autoComplete="address-level2"
+                          placeholder="City"
+                          value={draft.addressCity}
+                          onChange={(e) => set("addressCity", e.target.value)}
+                          className={inputClass}
+                        />
+                      </Field>
+
+                      <Field label="State / Region" id="region">
+                        <input
+                          id="region"
+                          name="region"
+                          autoComplete="address-level1"
+                          placeholder="State"
+                          value={draft.region}
+                          onChange={(e) => set("region", e.target.value)}
+                          className={inputClass}
+                        />
+                      </Field>
+                    </div>
+
+                    <Field
+                      label="ZIP / Postal code"
+                      hint="Alberta postcodes look like T5K 2M6."
+                      id="postal"
+                      error={state.errors?.postal}
+                    >
+                      <input
+                        id="postal"
+                        name="postal"
+                        autoComplete="postal-code"
+                        placeholder="ZIP / Postal code"
+                        value={draft.postal}
+                        onChange={(e) => set("postal", e.target.value.toUpperCase())}
+                        className={`${inputClass} tnum sm:max-w-56`}
+                      />
+                    </Field>
+                  </div>
+                </Fieldset>
+              )}
+
+              {step === 3 && (
                 <div className="flex flex-col gap-10">
-                  <Fieldset legend="Which city?">
-                    <Segmented
-                      name="city"
-                      options={cities.map((c) => ({ value: c.slug, label: c.name }))}
-                      value={draft.city}
-                      onChange={(v) => set("city", v)}
-                      wide
-                    />
-                  </Fieldset>
-
-                  <Fieldset legend="When do you need it?">
-                    <Segmented
-                      name="timing"
-                      options={TIMINGS}
-                      value={draft.timing}
-                      onChange={(v) => set("timing", v)}
-                      stack
-                    />
-                  </Fieldset>
-
-                  <Field
-                    label="A preferred date, if you have one"
-                    hint="Optional. Move cleans are booked at least a day before handover."
-                    id="date"
+                  <Fieldset
+                    legend="Choose your cleaning schedule"
+                    hint="Recurring visits keep the same cleaner. You can change or pause it later with two days' notice."
                   >
-                    <input
-                      id="date"
-                      type="date"
-                      value={draft.date}
-                      onChange={(e) => set("date", e.target.value)}
-                      className="w-full rounded-xl border border-plaster-300 bg-plaster-50 px-4 py-3.5 text-ink-900 transition-colors duration-300 hover:border-ink-500"
-                    />
-                  </Field>
+                    <div className="flex flex-col gap-2">
+                      {SCHEDULES.map((option) => {
+                        const on = draft.schedule === option.value;
+                        return (
+                          <label
+                            key={option.value}
+                            className={`flex cursor-pointer items-baseline gap-3.5 rounded-xl border px-5 py-3.5 transition-colors duration-300 ${
+                              on
+                                ? "border-ink-900 bg-ink-900 text-plaster-50"
+                                : "border-plaster-300 text-ink-700 hover:border-ink-500"
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              name="schedule-choice"
+                              value={option.value}
+                              checked={on}
+                              onChange={() => set("schedule", option.value)}
+                              className="sr-only"
+                            />
+                            <span
+                              aria-hidden
+                              className={`mt-1.5 h-3 w-3 shrink-0 rounded-full transition-colors duration-300 ${
+                                on ? "bg-amber-500" : "border border-plaster-300"
+                              }`}
+                            />
+                            <span className="flex-1">
+                              <span className="block font-medium">{option.label}</span>
+                              <span
+                                className={`mt-0.5 block text-[0.9375rem] ${
+                                  on ? "text-plaster-300" : "text-ink-500"
+                                }`}
+                              >
+                                {option.note}
+                              </span>
+                            </span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </Fieldset>
+
+                  <Fieldset
+                    legend="Pick a date and time for the appointment"
+                    hint="Optional, and not a confirmed booking. It tells us what you are aiming for; we come back with the nearest slot we can actually hold."
+                  >
+                    <div className="flex flex-col gap-6">
+                      <DatePicker value={draft.date} onChange={(v) => set("date", v)} />
+
+                      <div>
+                        <p className="font-medium text-ink-900">Time of day</p>
+                        <div className="mt-3 grid gap-2 sm:grid-cols-3">
+                          {TIME_SLOTS.map((option) => {
+                            const on = draft.timeSlot === option.value;
+                            return (
+                              <label
+                                key={option.value}
+                                className={`cursor-pointer rounded-xl border px-5 py-3.5 transition-colors duration-300 ${
+                                  on
+                                    ? "border-ink-900 bg-ink-900 text-plaster-50"
+                                    : "border-plaster-300 text-ink-700 hover:border-ink-500"
+                                }`}
+                              >
+                                <input
+                                  type="radio"
+                                  name="time-slot-choice"
+                                  value={option.value}
+                                  checked={on}
+                                  onChange={() => set("timeSlot", on ? "" : option.value)}
+                                  className="sr-only"
+                                />
+                                <span className="block font-medium">{option.label}</span>
+                                <span
+                                  className={`tnum mt-0.5 block text-[0.9375rem] ${
+                                    on ? "text-plaster-300" : "text-ink-500"
+                                  }`}
+                                >
+                                  {option.note}
+                                </span>
+                              </label>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  </Fieldset>
 
                   <Field
                     label="Anything we should know about getting in?"
@@ -348,16 +540,17 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
                   >
                     <textarea
                       id="access"
+                      name="access"
                       rows={3}
                       value={draft.access}
                       onChange={(e) => set("access", e.target.value)}
-                      className="w-full resize-y rounded-xl border border-plaster-300 bg-plaster-50 px-4 py-3.5 leading-relaxed text-ink-900 transition-colors duration-300 hover:border-ink-500"
+                      className={`${inputClass} resize-y leading-relaxed`}
                     />
                   </Field>
                 </div>
               )}
 
-              {step === 3 && (
+              {step === 4 && (
                 <div className="flex flex-col gap-8">
                   <Field label="Your name" id="name" error={state.errors?.name}>
                     <input
@@ -366,7 +559,7 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
                       autoComplete="name"
                       value={draft.name}
                       onChange={(e) => set("name", e.target.value)}
-                      className="w-full rounded-xl border border-plaster-300 bg-plaster-50 px-4 py-3.5 text-ink-900 transition-colors duration-300 hover:border-ink-500"
+                      className={inputClass}
                     />
                   </Field>
                   <Field
@@ -382,7 +575,7 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
                       autoComplete="email"
                       value={draft.email}
                       onChange={(e) => set("email", e.target.value)}
-                      className="w-full rounded-xl border border-plaster-300 bg-plaster-50 px-4 py-3.5 text-ink-900 transition-colors duration-300 hover:border-ink-500"
+                      className={inputClass}
                     />
                   </Field>
                   <Field
@@ -398,7 +591,7 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
                       autoComplete="tel"
                       value={draft.phone}
                       onChange={(e) => set("phone", e.target.value)}
-                      className="w-full rounded-xl border border-plaster-300 bg-plaster-50 px-4 py-3.5 text-ink-900 transition-colors duration-300 hover:border-ink-500"
+                      className={inputClass}
                     />
                   </Field>
                 </div>
@@ -409,8 +602,10 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
                   <span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-pine-600" />
                   {step === 0 && "Pick a service to carry on."}
                   {step === 1 && "We need bedrooms and bathrooms before we can quote anything."}
-                  {step === 2 && "Choose a city and roughly when you need it."}
-                  {step === 3 && "We need a name and an email that works."}
+                  {step === 2 &&
+                    "We need the street, the city and a postcode we can recognise before we can quote."}
+                  {step === 3 && "Choose how often you would like us."}
+                  {step === 4 && "We need a name and an email that works."}
                 </p>
               )}
 
@@ -516,15 +711,16 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
               quiet={!draft.bedrooms}
             />
             <Row
-              term="Where"
-              detail={cities.find((c) => c.slug === draft.city)?.name ?? "Not chosen yet"}
-              quiet={!draft.city}
+              term="Address"
+              detail={addressLine || "Not given yet"}
+              quiet={!draft.address1.trim()}
             />
             <Row
-              term="When"
-              detail={TIMINGS.find((t) => t.value === draft.timing)?.label ?? "Not chosen yet"}
-              quiet={!draft.timing}
+              term="Schedule"
+              detail={schedule?.label ?? "Not chosen yet"}
+              quiet={!schedule}
             />
+            <Row term="When" detail={whenLine || "Not chosen yet"} quiet={!whenLine} />
           </dl>
 
           <div className="mt-6 border-t border-plaster-300 pt-6">
@@ -535,8 +731,8 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
               </p>
             ) : (
               <p className="text-[0.9375rem] leading-relaxed text-ink-500">
-                Tell us the service, the size of your home and roughly when. A person prices it by
-                hand and comes back with one number.
+                Tell us the service, the size of your home, where it is and how often. A person
+                prices it by hand and comes back with one number.
               </p>
             )}
           </div>
@@ -547,6 +743,20 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
 }
 
 /* ------------------------------------------------------------------ parts */
+
+const inputClass =
+  "w-full rounded-xl border border-plaster-300 bg-plaster-50 px-4 py-3.5 text-ink-900 transition-colors duration-300 placeholder:text-ink-500/50 hover:border-ink-500";
+
+/** "3 September 2026", built from the local Y-M-D key rather than a parsed UTC instant. */
+function longDate(value: string) {
+  const [y, m, d] = value.split("-").map(Number);
+  if (!y || !m || !d) return value;
+  return new Date(y, m - 1, d).toLocaleDateString("en-CA", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
 
 function Row({
   term,
@@ -561,7 +771,7 @@ function Row({
 }) {
   return (
     <div className="flex items-baseline justify-between gap-6 border-b border-plaster-300 py-3.5 last:border-b-0">
-      <dt className="text-[0.9375rem] text-ink-500">{term}</dt>
+      <dt className="shrink-0 text-[0.9375rem] text-ink-500">{term}</dt>
       <dd className={`text-right text-[0.9375rem] ${quiet ? "text-ink-500" : "font-medium text-ink-900"}`}>
         {detail}
         {note && <span className="mt-1 block text-sm font-normal text-ink-500">{note}</span>}

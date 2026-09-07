@@ -12,10 +12,10 @@
 export const business = {
   name: "Build Bright Cleaning",
   tagline: "One cleaner. The same one. Every time.",
-  phoneDisplay: "(403) 555-0148",
-  phoneHref: "+14035550148",
-  email: "hello@buildbright.example",
-  cities: ["Calgary", "Edmonton"] as const,
+  phoneDisplay: "(825) 963-3038",
+  phoneHref: "+18259633038",
+  email: "navneetlotey2000@gmail.com",
+  cities: ["Edmonton"] as const,
   hours: "Mon–Sat, 7am–7pm MT",
 };
 
@@ -597,30 +597,6 @@ export type City = {
 
 export const cities: City[] = [
   {
-    slug: "calgary",
-    name: "Calgary",
-    lede: "From the inner-city walk-ups to the new builds out past Stoney Trail.",
-    body: [
-      "Calgary homes have a specific problem, and it is the entryway. Six months of road salt and gravel comes through the front door on everybody's boots and then travels. Our cleaners here start at the threshold and work inward, because if you get the entry wrong you spend the rest of the visit spreading it around.",
-      "Chinooks are the second one. A twenty-degree swing in a day pulls moisture out of everything, then puts it back. It is why we hand-wash window tracks in this city rather than just vacuuming them.",
-    ],
-    neighbourhoods: [
-      "Altadore",
-      "Bridgeland",
-      "Killarney",
-      "Inglewood",
-      "Mount Pleasant",
-      "Marda Loop",
-      "Renfrew",
-      "Bowness",
-      "Auburn Bay",
-      "Mahogany",
-      "Tuscany",
-      "Evanston",
-    ],
-    note: "Most Calgary quotes are returned the same working day.",
-  },
-  {
     slug: "edmonton",
     name: "Edmonton",
     lede: "River valley character homes, Whyte Ave walk-ups, and everything south of the Henday.",
@@ -641,6 +617,9 @@ export const cities: City[] = [
       "Terwillegar",
       "Griesbach",
       "Laurel",
+      "Ottewell",
+      "Oliver",
+      "Belgravia",
     ],
     note: "Edmonton quotes are returned within one working day.",
   },
@@ -665,7 +644,7 @@ export type Review = {
 export const reviews: Review[] = [
   {
     name: "Priya M.",
-    where: "Altadore, Calgary",
+    where: "Ottewell, Edmonton",
     service: "Recurring, biweekly",
     stars: 5,
     quote:
@@ -683,7 +662,7 @@ export const reviews: Review[] = [
   },
   {
     name: "Sarah L.",
-    where: "Bridgeland, Calgary",
+    where: "Strathcona, Edmonton",
     service: "Deep clean",
     stars: 5,
     quote:
@@ -701,7 +680,7 @@ export const reviews: Review[] = [
   },
   {
     name: "Jen T.",
-    where: "Mahogany, Calgary",
+    where: "Terwillegar, Edmonton",
     service: "One-time",
     stars: 4,
     quote:
@@ -719,7 +698,7 @@ export const reviews: Review[] = [
   },
   {
     name: "Colleen B.",
-    where: "Inglewood, Calgary",
+    where: "Oliver, Edmonton",
     service: "Deep clean",
     stars: 5,
     quote:
@@ -737,7 +716,7 @@ export const reviews: Review[] = [
   },
   {
     name: "Nadia F.",
-    where: "Killarney, Calgary",
+    where: "Belgravia, Edmonton",
     service: "Recurring, biweekly",
     stars: 4,
     quote:
@@ -755,7 +734,7 @@ export const reviews: Review[] = [
   },
   {
     name: "Bianca S.",
-    where: "Evanston, Calgary",
+    where: "Griesbach, Edmonton",
     service: "Move-out",
     stars: 5,
     quote:
@@ -782,7 +761,7 @@ export const reviews: Review[] = [
   },
   {
     name: "Alina K.",
-    where: "Marda Loop, Calgary",
+    where: "Glenora, Edmonton",
     service: "Steam carpet",
     stars: 5,
     quote:
@@ -791,7 +770,7 @@ export const reviews: Review[] = [
   },
   {
     name: "Jenna R.",
-    where: "Bowness, Calgary",
+    where: "Laurel, Edmonton",
     service: "Wall stains",
     stars: 4,
     quote:

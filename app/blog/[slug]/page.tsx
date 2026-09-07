@@ -65,11 +65,11 @@ export default async function PostPage(props: PageProps<"/blog/[slug]">) {
 
           <div className="measure mt-16 border-t border-plaster-300 pt-10">
             <h2 className="font-display text-2xl leading-tight font-semibold text-ink-900">
-              We do this for a living in Calgary and Edmonton
+              We do this for a living in Edmonton
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-ink-700">
               One cleaner who learns your home, a fixed price for the job, and the entryway done
-              first. Four questions and about two minutes.
+              first. A few questions and about three minutes.
             </p>
             <Link
               href="/quote"

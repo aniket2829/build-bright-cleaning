@@ -16,7 +16,7 @@ export async function generateMetadata(props: PageProps<"/services/[slug]">): Pr
   if (!service) return {};
   return {
     title: service.name,
-    description: `${service.lede} Residential cleaning in Calgary and Edmonton.`,
+    description: `${service.lede} Residential cleaning in Edmonton, Alberta.`,
   };
 }
 

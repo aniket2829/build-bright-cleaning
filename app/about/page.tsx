@@ -21,7 +21,7 @@ const principles = [
   },
   {
     title: "Small map, on purpose",
-    body: "Two cities. We turn down work we cannot cover with the same person on the same schedule, which is a strange thing to advertise and the reason the rest of this works.",
+    body: "One city. We work in Edmonton and nowhere else, because we turn down work we cannot cover with the same person on the same schedule. That is a strange thing to advertise and the reason the rest of this works.",
   },
   {
     title: "Say it before, not after",

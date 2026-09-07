@@ -9,7 +9,7 @@ import { business, cities, reviews } from "@/lib/content";
 const steps = [
   {
     title: "Tell us about the house",
-    body: "Four questions and about two minutes. Rooms, city, roughly when. No account, no call required.",
+    body: "A few questions and about three minutes. Rooms, address, how often and when. No account, no call required.",
   },
   {
     title: "We send one number",
@@ -54,7 +54,7 @@ export default function Home() {
               Come home to it already&nbsp;done.
             </h1>
             <p style={{ "--d": "370ms" } as React.CSSProperties} className="arrive mt-8 text-xl leading-relaxed text-frost-200 sm:text-2xl">
-              House cleaning in Calgary and Edmonton, kept by one vetted cleaner who learns your
+              House cleaning in Edmonton, kept by one vetted cleaner who learns your
               home. Not a different crew every visit.
             </p>
 
@@ -177,7 +177,7 @@ export default function Home() {
               href="/quote"
               className="group inline-flex items-center gap-2.5 rounded-full bg-amber-500 px-7 py-4 text-lg font-medium text-ink-900 no-underline transition-colors duration-300 hover:bg-amber-400"
             >
-              Start the two minutes
+              Start the three minutes
               <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
             <a
@@ -227,7 +227,11 @@ export default function Home() {
       {/* ----------------------------------------------------------- cities */}
       <section className="warm-side bg-plaster-50 pb-20 text-ink-700 sm:pb-28">
         <Container>
-          <div className="grid gap-x-10 gap-y-10 border-t border-plaster-300 pt-14 md:grid-cols-2">
+          <div
+            className={`grid gap-x-10 gap-y-10 border-t border-plaster-300 pt-14 ${
+              cities.length > 1 ? "md:grid-cols-2" : ""
+            }`}
+          >
             {cities.map((city) => (
               <Link
                 key={city.slug}

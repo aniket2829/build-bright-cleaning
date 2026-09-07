@@ -7,7 +7,7 @@ import { services } from "@/lib/content";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Recurring, deep, move-in/move-out, one-time, post-construction, steam carpet cleaning and wall stain removal in Calgary and Edmonton, and exactly what each one covers, room by room.",
+    "Recurring, deep, move-in/move-out, one-time, post-construction, steam carpet cleaning and wall stain removal in Edmonton, and exactly what each one covers, room by room.",
 };
 
 export default function ServicesPage() {

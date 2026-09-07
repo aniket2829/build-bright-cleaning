@@ -20,15 +20,15 @@ const schibsted = Schibsted_Grotesk({
 export const metadata: Metadata = {
   metadataBase: new URL("https://buildbright.example"),
   title: {
-    default: "Build Bright Cleaning · house cleaning in Calgary & Edmonton",
+    default: "Build Bright Cleaning · house cleaning in Edmonton",
     template: "%s · Build Bright Cleaning",
   },
   description:
-    "Residential cleaning in Calgary and Edmonton. One vetted cleaner who learns your home and keeps it: recurring, deep, move-in/out, one-time and post-construction cleans, steam carpet cleaning and wall stain removal, quoted as a fixed price.",
+    "Residential cleaning in Edmonton, Alberta. One vetted cleaner who learns your home and keeps it: recurring, deep, move-in/out, one-time and post-construction cleans, steam carpet cleaning and wall stain removal, quoted as a fixed price.",
   openGraph: {
     title: "Build Bright Cleaning",
     description:
-      "One cleaner. The same one. Every time. House cleaning in Calgary and Edmonton.",
+      "One cleaner. The same one. Every time. House cleaning in Edmonton.",
     type: "website",
     locale: "en_CA",
   },
