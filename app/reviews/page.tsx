@@ -5,7 +5,7 @@ import { reviews } from "@/lib/content";
 export const metadata: Metadata = {
   title: "Reviews",
   description:
-    "What Build Bright clients in Edmonton say about recurring, deep, move-out and post-construction cleans, carpet and wall work, and having the same cleaner every visit.",
+    "What Build Bright clients in Edmonton say about deep, move-out and post-construction cleans, carpet and wall work, and careful service.",
 };
 
 export default function ReviewsPage() {

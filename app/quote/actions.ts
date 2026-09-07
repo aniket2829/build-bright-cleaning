@@ -13,7 +13,7 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const PHONE = /^[\d\s()+.-]{9,}$/;
 const POSTAL = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
 
-const SCHEDULES = ["one-time", "weekly", "every-2-weeks", "every-3-weeks", "monthly"];
+const SCHEDULES = ["one-time"];
 const TIME_SLOTS = ["morning", "afternoon", "evening"];
 
 /**

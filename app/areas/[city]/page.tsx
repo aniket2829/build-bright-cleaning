@@ -16,7 +16,7 @@ export async function generateMetadata(props: PageProps<"/areas/[city]">): Promi
   if (!city) return {};
   return {
     title: `House cleaning in ${city.name}`,
-    description: `${city.lede} Recurring, deep, move-in/out, one-time and post-construction cleans, steam carpet cleaning and wall stain removal across ${city.name}, quoted as a fixed price.`,
+    description: `${city.lede} Deep, move-in/out, one-time and post-construction cleans, steam carpet cleaning and wall stain removal across ${city.name}, quoted as a fixed price.`,
   };
 }
 
@@ -88,7 +88,7 @@ export default async function CityPage(props: PageProps<"/areas/[city]">) {
             What we clean in {city.name}
           </h2>
           <p className="measure mt-5 leading-relaxed text-ink-700">
-            The same seven services across the city, quoted the same way. We do not charge more for
+            The same six services across the city, quoted the same way. We do not charge more for
             the harder winter.
           </p>
           <div className="mt-12">

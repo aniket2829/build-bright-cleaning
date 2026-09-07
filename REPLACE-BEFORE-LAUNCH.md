@@ -59,7 +59,7 @@ The form now collects, and `submitQuote` now validates:
 |---|---|
 | Service, bedrooms, bathrooms, pets, extras | As before. |
 | `address1`, `address2`, `addressCity`, `region`, `postal` | Service address. `addressCity` defaults to Edmonton and `region` to Alberta; `postal` is validated against the Canadian format. |
-| `schedule` | One of `one-time`, `weekly`, `every-2-weeks`, `every-3-weeks`, `monthly`. Required. |
+| `schedule` | `one-time`. Required. |
 | `date`, `timeSlot` | Both optional. The date comes from the themed picker in `components/date-picker.tsx` (past dates disabled, local `YYYY-MM-DD`); `timeSlot` is `morning`, `afternoon` or `evening`. |
 | `access`, `name`, `email`, `phone` | As before. |
 

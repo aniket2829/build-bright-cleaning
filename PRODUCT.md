@@ -12,7 +12,7 @@ Next.js 16.3.4 (App Router) + React 19 + TypeScript + Tailwind CSS v4, from an o
 
 ## Users
 
-Primary user: a homeowner or renter in Edmonton looking to hire a residential cleaning service. They arrive with a specific job in mind, a recurring clean they no longer want to do themselves, a deep clean before or after an event, or a move-in/move-out clean tied to a hard date, and they are comparison-shopping two or three local companies in one sitting. They need to judge trustworthiness (someone will be in their home, often unattended) and get a price before committing.
+Primary user: a homeowner or renter in Edmonton looking to hire a residential cleaning service. They arrive with a specific job in mind, a deep clean before or after an event, or a move-in/move-out clean tied to a hard date, and they are comparison-shopping two or three local companies in one sitting. They need to judge trustworthiness (someone will be in their home, often unattended) and get a price before committing.
 
 ## Product Purpose
 
@@ -33,7 +33,7 @@ Visitors are comparison-shopping local cleaning companies, frequently on a phone
 ## Capabilities and Constraints
 
 - Single conversion path: **request a quote**. A quote form is the primary call to action across the site.
-- Services offered: recurring house cleaning, deep cleaning, move-in/move-out cleaning, one-time cleans, post-construction cleaning, steam carpet cleaning, and wall stain removal. Residential only; no commercial offering. (Post-construction, steam carpet and wall stain removal were added by the user after the shape interview, which had recorded the first four and no post-construction work.)
+- Services offered: deep cleaning, move-in/move-out cleaning, one-time cleans, post-construction cleaning, steam carpet cleaning, and wall stain removal. Residential only; no commercial offering.
 - Service area: Edmonton only.
 - Confirmed since the shape interview: a phone number is offered as a secondary path beside the form; a journal (blog) is part of the site.
 - **No figures anywhere.** The user later directed that all pricing and all visit durations be removed from the site. There are no starting-at prices, no rate card, no live estimate, no hour ranges and no cadence lines; `/pricing` was deleted. The site still states the pricing *model* (a fixed price for the job, never hourly) and routes every cost question to the quote form, where a person prices it by hand.

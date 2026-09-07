@@ -38,89 +38,12 @@ export type Service = {
 
 export const services: Service[] = [
   {
-    slug: "recurring",
-    name: "Recurring clean",
-    shortName: "Recurring",
-    dek: "The one that ends the argument about whose turn it is.",
-    forWho: "Households who want it handled and never want to think about it again.",
-    lede: "Your cleaner learns your home once, then keeps it. Same person, same day, same standard: the visit you stop having to manage.",
-    body: [
-      "The first visit is the long one. Your cleaner walks the house with you, writes down what matters: the counter you want cleared, the room the dog is not allowed in, the mug that is not to be moved. That sheet stays with your home for as long as you are with us.",
-      "After that, the visits get shorter and better. Nobody is relearning where you keep the vacuum. Nobody is guessing whether the hardwood takes a wet mop. By the fourth visit your cleaner is finding the things you did not think to ask for.",
-      "If your regular cleaner is sick or on holiday, we tell you before the visit, not after, and we send the same substitute each time so there are only ever two people who know your home instead of nine.",
-    ],
-    rooms: [
-      {
-        room: "Kitchen",
-        tasks: [
-          "Counters, backsplash and sink scrubbed",
-          "Exterior of every appliance, handles included",
-          "Cooktop degreased, range hood face wiped",
-          "Floors vacuumed then damp-mopped",
-          "Bins emptied and liners replaced",
-        ],
-      },
-      {
-        room: "Bathrooms",
-        tasks: [
-          "Tub, shower and glass descaled",
-          "Toilet cleaned base to tank",
-          "Mirrors and chrome polished streak-free",
-          "Floors washed by hand at the edges",
-          "Towels straightened, paper restocked",
-        ],
-      },
-      {
-        room: "Bedrooms",
-        tasks: [
-          "Beds made, linens changed when left out",
-          "All reachable surfaces dusted",
-          "Under-bed vacuumed where accessible",
-          "Mirrors and glass cleared",
-        ],
-      },
-      {
-        room: "Living areas",
-        tasks: [
-          "Upholstery vacuumed, cushions reset",
-          "Baseboards, sills and ledges dusted",
-          "Screens and remotes wiped",
-          "Floors vacuumed and mopped",
-        ],
-      },
-      {
-        room: "Entry and stairs",
-        tasks: [
-          "Boot tray cleared of salt and grit",
-          "Stair treads and risers vacuumed",
-          "Railings and switch plates wiped",
-          "Door glass cleaned inside and out",
-        ],
-      },
-      {
-        room: "Laundry",
-        tasks: [
-          "Machine tops and fronts wiped",
-          "Lint trap cleared",
-          "Sink and counter scrubbed",
-          "Floor vacuumed and mopped",
-        ],
-      },
-    ],
-    extras: ["Inside the fridge", "Inside the oven", "Interior windows", "Laundry folded"],
-    notIncluded: [
-      "Exterior windows above ground level",
-      "Carpet steam extraction (book the steam carpet clean)",
-      "Anything requiring a ladder over six feet",
-    ],
-  },
-  {
     slug: "deep",
     name: "Deep clean",
     shortName: "Deep",
-    dek: "For the places a weekly clean politely walks past.",
+    dek: "For the places a routine clean politely walks past.",
     forWho: "Homes that have been maintained but not reset, or are about to host.",
-    lede: "Everything a recurring clean covers, plus the parts nobody gets to: inside, behind, underneath, and above eye level.",
+    lede: "A complete reset for the parts a standard visit cannot reach: inside, behind, underneath, and above eye level.",
     body: [
       "A deep clean is not a faster clean with more pressure. It is a different list. Baseboards get washed rather than dusted. Cabinet fronts get degreased at the handles where the finish has gone tacky. Vents come off. Light fixtures come down.",
       "We book deep cleans as a single unbroken block so nothing is left half-dismantled. We quote for the house the job actually needs, not for the visit we would like it to be. We would rather lose the work than start something we have to walk away from half-finished.",
@@ -276,7 +199,7 @@ export const services: Service[] = [
     forWho: "People who need one very good day and no ongoing arrangement.",
     lede: "A full clean of the whole home with no subscription attached. Book it, watch how it goes, decide about the rest later.",
     body: [
-      "Most of our recurring clients started here. A one-time clean is the same standard and the same person you would get on a recurring plan, without asking you to commit to a stranger on the strength of a website.",
+      "Most people start here. A one-time clean gives you the full standard without asking you to commit to an ongoing arrangement on the strength of a website.",
       "It is also just a useful thing on its own. The week before family arrives. The Monday after they leave. The Saturday you finally accept that the kitchen has gotten away from you.",
       "If you decide afterwards that you want it regularly, we keep the notes from this visit and you keep the cleaner who made them.",
     ],
@@ -643,15 +566,6 @@ export type Review = {
 
 export const reviews: Review[] = [
   {
-    name: "Priya M.",
-    where: "Ottewell, Edmonton",
-    service: "Recurring, biweekly",
-    stars: 5,
-    quote:
-      "It is the same person every second Thursday and that is the entire reason I stayed. She knows the front closet is a disaster zone and she knows I do not want her touching my husband's desk. I have never had to explain either thing twice.",
-    months: "Client for 14 months",
-  },
-  {
     name: "Dan W.",
     where: "Highlands, Edmonton",
     service: "Move-out",
@@ -670,15 +584,6 @@ export const reviews: Review[] = [
     months: "Booked twice",
   },
   {
-    name: "Marcus O.",
-    where: "Garneau, Edmonton",
-    service: "Recurring, weekly",
-    stars: 5,
-    quote:
-      "Our house is 1912 with original fir floors and I have watched two previous companies wreck sections of it with a soaking mop. Build Bright asked about the finish before they asked about the price.",
-    months: "Client for 2 years",
-  },
-  {
     name: "Jen T.",
     where: "Terwillegar, Edmonton",
     service: "One-time",
@@ -686,15 +591,6 @@ export const reviews: Review[] = [
     quote:
       "Excellent clean, and honest about what they were not going to get to in the time booked. I would rather hear that up front than find out at the end. Only knocking a star because getting the first booking took a couple of days.",
     months: "Booked January 2026",
-  },
-  {
-    name: "Ahmed R.",
-    where: "Windermere, Edmonton",
-    service: "Recurring, monthly",
-    stars: 5,
-    quote:
-      "Two kids, a dog, and both of us working. The monthly reset is the only reason this house is survivable. Same cleaner since the first visit and she is genuinely part of how the place runs now.",
-    months: "Client for 8 months",
   },
   {
     name: "Colleen B.",
@@ -715,21 +611,12 @@ export const reviews: Review[] = [
     months: "Booked August 2025",
   },
   {
-    name: "Nadia F.",
-    where: "Belgravia, Edmonton",
-    service: "Recurring, biweekly",
-    stars: 4,
-    quote:
-      "Very good, very consistent. My regular was away in December and they told me in advance and sent the same backup both times, which I appreciated more than I expected to.",
-    months: "Client for 11 months",
-  },
-  {
     name: "Tom H.",
     where: "Westmount, Edmonton",
     service: "One-time",
     stars: 5,
     quote:
-      "Booked one clean before my parents visited, mostly to prove a point to myself. Ended up on the recurring plan by February.",
+      "Booked one clean before my parents visited, mostly to prove a point to myself. It was exactly the reset the house needed.",
     months: "Client for 6 months",
   },
   {
@@ -740,15 +627,6 @@ export const reviews: Review[] = [
     quote:
       "The quote was the price. Nothing was added at the end, and nothing was discovered at the end either. That is apparently rare and it should not be.",
     months: "Booked October 2025",
-  },
-  {
-    name: "Greg P.",
-    where: "Crestwood, Edmonton",
-    service: "Recurring, biweekly",
-    stars: 5,
-    quote:
-      "Six months in, the house is at a level I could not hold on my own even when I had time. I stopped tidying before they come, which was the real test.",
-    months: "Client for 6 months",
   },
   {
     name: "Marc-André T.",
@@ -797,7 +675,7 @@ export const faqs: { q: string; a: string; group: string }[] = [
   {
     group: "The cleaner",
     q: "Do I need to be home?",
-    a: "No. Most of our recurring clients are at work. You can leave a key, a lockbox code, or let them in the first time and arrange access from there. Whatever you choose, it is recorded once and does not need re-explaining.",
+    a: "No. Most clients are at work. You can leave a key, a lockbox code, or let them in for the visit and arrange access from there. Whatever you choose, it is recorded once and does not need re-explaining.",
   },
   {
     group: "Money",
@@ -823,11 +701,6 @@ export const faqs: { q: string; a: string; group: string }[] = [
     group: "Scheduling",
     q: "How far ahead should I book a move clean?",
     a: "As soon as you have a possession date. We schedule move cleans well before handover so that anything found late in the clean can still be fixed before the inspection.",
-  },
-  {
-    group: "Scheduling",
-    q: "Can I skip or move a recurring visit?",
-    a: "Yes, with two days' notice, as often as you need. Holidays, renovations, a week where it is genuinely not worth it. Just tell us.",
   },
   {
     group: "Scheduling",
@@ -924,7 +797,7 @@ export const posts: Post[] = [
         ],
       },
       {
-        h: "A recurring clean maintains a state",
+        h: "A one-time clean maintains a state",
         p: [
           "It assumes the house was clean recently and returns it to that. Surfaces get wiped, floors get done, bathrooms get reset. Nothing is dismantled, because nothing needs to be.",
         ],

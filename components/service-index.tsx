@@ -7,8 +7,8 @@ const GRID = "grid grid-cols-1 items-baseline gap-x-8 gap-y-2 sm:grid-cols-[16re
 /**
  * THE INDEX: one ruled list the whole site measures against.
  *
- * Every service sits on the same rule, in the same order, so the seven are
- * comparable at a glance instead of sitting in seven disconnected cards.
+ * Every service sits on the same rule, in the same order, so the six are
+ * comparable at a glance instead of sitting in six disconnected cards.
  * It carries no prices and no durations; the quote returns those.
  */
 export function ServiceIndex({ tone = "dark" }: { tone?: "dark" | "warm" }) {

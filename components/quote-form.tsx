@@ -11,10 +11,6 @@ const STEPS = ["Service", "Your home", "Address", "Schedule", "You"] as const;
 
 export const SCHEDULES = [
   { value: "one-time", label: "One time", note: "A single visit, priced on its own." },
-  { value: "weekly", label: "Weekly", note: "Same day, same cleaner, every week." },
-  { value: "every-2-weeks", label: "Every 2 weeks", note: "The most common choice." },
-  { value: "every-3-weeks", label: "Every 3 weeks", note: "For a house that holds well." },
-  { value: "monthly", label: "Monthly", note: "A reset rather than upkeep." },
 ];
 
 export const TIME_SLOTS = [
@@ -444,7 +440,7 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
                 <div className="flex flex-col gap-10">
                   <Fieldset
                     legend="Choose your cleaning schedule"
-                    hint="Recurring visits keep the same cleaner. You can change or pause it later with two days' notice."
+                    hint="Choose the date that suits you. We will confirm the nearest available appointment."
                   >
                     <div className="flex flex-col gap-2">
                       {SCHEDULES.map((option) => {

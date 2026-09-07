@@ -7,14 +7,14 @@ import { services } from "@/lib/content";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Recurring, deep, move-in/move-out, one-time, post-construction, steam carpet cleaning and wall stain removal in Edmonton, and exactly what each one covers, room by room.",
+    "Deep, move-in/move-out, one-time, post-construction, steam carpet cleaning and wall stain removal in Edmonton, and exactly what each one covers, room by room.",
 };
 
 export default function ServicesPage() {
   return (
     <>
       <PageHero
-        title="Seven services. No packages, no tiers, no upsell script."
+        title="Six services. No packages, no tiers, no upsell script."
         lede="Every one is quoted as a fixed price for the job. Pick the one that matches the state of your house, and if you pick wrong we will tell you before we start rather than after."
       />
 

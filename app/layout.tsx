@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     template: "%s · Build Bright Cleaning",
   },
   description:
-    "Residential cleaning in Edmonton, Alberta. One vetted cleaner who learns your home and keeps it: recurring, deep, move-in/out, one-time and post-construction cleans, steam carpet cleaning and wall stain removal, quoted as a fixed price.",
+    "Residential cleaning in Edmonton, Alberta. One vetted cleaner for deep, move-in/out, one-time and post-construction cleans, steam carpet cleaning and wall stain removal, quoted as a fixed price.",
   openGraph: {
     title: "Build Bright Cleaning",
     description:

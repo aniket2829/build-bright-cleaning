@@ -77,7 +77,6 @@ export function SiteFooter() {
 
           <FooterCol title="Start">
             <FooterLink href="/quote">Get a quote</FooterLink>
-            <FooterLink href="/services/recurring">Book recurring</FooterLink>
             <FooterLink href="/services/move-in-out">Book a move clean</FooterLink>
           </FooterCol>
         </div>

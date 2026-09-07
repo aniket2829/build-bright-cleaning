@@ -116,7 +116,7 @@ export default function Home() {
         <Container>
           <Aperture>
             <h2 className="font-display display-tight max-w-[16ch] text-4xl leading-[1.04] font-semibold text-frost-100 sm:text-5xl">
-              Seven services, one list.
+              Six services, one list.
             </h2>
             <p className="measure mt-6 text-lg leading-relaxed text-frost-400">
               Everything we do, written out plainly so you can find the one that matches the state
