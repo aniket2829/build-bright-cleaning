@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 /**
  * ARRIVAL: content crosses a widening aperture of light instead of fading in.
  *
- * Used only at threshold moments (the promise, the scale, the quote entry),
+ * Used only at threshold moments (the promise, the service index, the quote entry),
  * never as a blanket entrance on every section. Renders visible by default and
  * only arms itself once JS confirms motion is wanted, so no-JS and
  * reduced-motion readers get the finished composition immediately.

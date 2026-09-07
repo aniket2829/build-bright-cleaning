@@ -121,7 +121,7 @@ a {
   color: var(--color-plaster-50);
 }
 
-/* Prices, room counts and durations all read on one scale, so they must align. */
+/* Checklist counts, phone numbers and reference codes must align, so they go tabular. */
 .tnum {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1;
