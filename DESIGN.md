@@ -170,7 +170,9 @@ Four ramp steps are declared in `app/globals.css` and currently unused — `dusk
 
 ### Named Rules
 
-**The Temperature Rule.** A section's ground says where the reader is in the walk. Dusk grounds are the street: hero, page heroes, the 404, anything before the argument lands. Plaster grounds are inside: how-it-works, proof, service detail, forms, long-form reading, and the whole footer. Cross once per page, forwards, and never alternate back and forth.
+**The Temperature Rule.** A section's ground says where the reader is in the walk. Dusk grounds are the street: hero, page heroes, anything before the argument lands. Plaster grounds are inside: how-it-works, proof, service detail, forms, long-form reading, and the whole footer. Cross once per page, forwards, and never alternate back and forth.
+
+*(The 404 was listed among the dusk-only grounds until it was given an argument. A page that stops at the apology stays outside; `app/not-found.tsx` now carries the Service Index and the service area below it, so it crosses once at the point of action like every other route. The governing clause did the work — the example list was describing an empty page, not making an exception.)*
 
 **The Warm-Side Rule.** Any element painted on plaster must carry the `.warm-side` class on its section (or an ancestor). That class is not cosmetic: it flips `color-scheme` to light and re-tints the scrollbar and `::selection` so the browser's own surfaces stay legible against the warm ground. A plaster section without `.warm-side` is a bug, not a variant. See `app/globals.css` and every `warm-side` section in `app/`.
 

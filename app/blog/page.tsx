@@ -3,11 +3,14 @@ import Link from "next/link";
 import { Container, PageHero } from "@/components/page-parts";
 import { ArrowRight } from "@/components/icons";
 import { posts } from "@/lib/content";
+import { JsonLd } from "@/components/json-ld";
+import { breadcrumbJsonLd, canonical } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Journal",
   description:
     "Notes on keeping an Alberta house: winter entryways, what a deep clean actually includes, getting a damage deposit back, and the products that quietly ruin things.",
+  ...canonical("/blog"),
 };
 
 export default function BlogPage() {
@@ -15,6 +18,8 @@ export default function BlogPage() {
 
   return (
     <>
+      <JsonLd data={breadcrumbJsonLd([{ name: "Journal", path: "/blog" }])} />
+
       <PageHero
         title="Notes on keeping a house in a place like this."
         lede="Written by the people doing the work. Mostly practical, occasionally opinionated about mops."

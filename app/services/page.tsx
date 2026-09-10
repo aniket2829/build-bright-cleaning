@@ -3,16 +3,21 @@ import Link from "next/link";
 import { Container, PageHero } from "@/components/page-parts";
 import { ArrowRight } from "@/components/icons";
 import { services } from "@/lib/content";
+import { JsonLd } from "@/components/json-ld";
+import { breadcrumbJsonLd, canonical } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Services",
   description:
     "Deep, move-in/move-out, one-time, post-construction, steam carpet cleaning and wall stain removal in Edmonton, and exactly what each one covers, room by room.",
+  ...canonical("/services"),
 };
 
 export default function ServicesPage() {
   return (
     <>
+      <JsonLd data={breadcrumbJsonLd([{ name: "Services", path: "/services" }])} />
+
       <PageHero
         title="Six services. No packages, no tiers, no upsell script."
         lede="Every one is quoted as a fixed price for the job. Pick the one that matches the state of your house, and if you pick wrong we will tell you before we start rather than after."

@@ -3,11 +3,14 @@ import Link from "next/link";
 import { Container, PageHero } from "@/components/page-parts";
 import { Chevron } from "@/components/icons";
 import { business, faqs } from "@/lib/content";
+import { JsonLd } from "@/components/json-ld";
+import { breadcrumbJsonLd, canonical, faqJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Questions",
   description:
     "How the same-cleaner arrangement works, what happens if something is not right, how pricing and access work, and what to do about pets, keys and skipped visits.",
+  ...canonical("/faq"),
 };
 
 export default function FaqPage() {
@@ -15,6 +18,15 @@ export default function FaqPage() {
 
   return (
     <>
+      {/* Every question below is rendered into the HTML by the accordion, open
+          or shut, which is the condition FAQ rich results require. */}
+      <JsonLd
+        data={[
+          faqJsonLd(faqs),
+          breadcrumbJsonLd([{ name: "Questions", path: "/faq" }]),
+        ]}
+      />
+
       <PageHero
         title="Questions people actually ask."
         lede="Mostly about the cleaner, the money, and what happens when something goes wrong. If yours is not here, phone us. A person answers."

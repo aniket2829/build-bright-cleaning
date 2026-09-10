@@ -3,16 +3,21 @@ import Link from "next/link";
 import { Container, PageHero } from "@/components/page-parts";
 import { ArrowRight } from "@/components/icons";
 import { cities, surroundingCommunities } from "@/lib/content";
+import { JsonLd } from "@/components/json-ld";
+import { breadcrumbJsonLd, canonical } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Where we clean",
   description:
     "Build Bright cleans homes in Edmonton and the communities around it — St. Albert, Sherwood Park, Spruce Grove, Leduc and more — with the neighbourhoods we cover and how quickly a quote comes back.",
+  ...canonical("/areas"),
 };
 
 export default function AreasPage() {
   return (
     <>
+      <JsonLd data={breadcrumbJsonLd([{ name: "Where we clean", path: "/areas" }])} />
+
       <PageHero
         title="Edmonton, and the towns around it."
         lede="We only take work where we can hold the same cleaner on the same schedule, so the map stops at the edge of the region. Ten communities, and nothing we cannot cover properly."

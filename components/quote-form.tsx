@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { submitQuote, type QuoteState } from "@/app/quote/actions";
 import { cities, services } from "@/lib/content";
 import { DatePicker } from "@/components/date-picker";
+import { trackEvent } from "@/components/analytics";
 import { ArrowLeft, ArrowRight, Check, Clock } from "@/components/icons";
 
 const STEPS = ["Service", "Your home", "Address", "Schedule", "You"] as const;
@@ -77,6 +78,20 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
   const service = services.find((s) => s.slug === draft.service);
   const schedule = SCHEDULES.find((s) => s.value === draft.schedule);
   const sent = state.status === "sent";
+
+  /* The one conversion on the site, reported when the server actually accepted
+     the enquiry — not when the button was pressed. Keyed on the reference so a
+     re-render of the confirmation cannot count the same quote twice. */
+  useEffect(() => {
+    if (state.status !== "sent") return;
+    trackEvent("generate_lead", {
+      service: draft.service,
+      city: draft.city,
+      bedrooms: draft.bedrooms,
+      bathrooms: draft.bathrooms,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.status, state.reference]);
 
   const stepValid = (i: number) => {
     if (i === 0) return Boolean(draft.service);

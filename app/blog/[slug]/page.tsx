@@ -3,7 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container, PageHero } from "@/components/page-parts";
 import { ArrowRight } from "@/components/icons";
-import { posts, postBySlug } from "@/lib/content";
+import { business, posts, postBySlug } from "@/lib/content";
+import { JsonLd } from "@/components/json-ld";
+import { OG_IMAGE, breadcrumbJsonLd, canonical, postJsonLd } from "@/lib/seo";
 
 export function generateStaticParams() {
   return posts.map((p) => ({ slug: p.slug }));
@@ -16,7 +18,18 @@ export async function generateMetadata(props: PageProps<"/blog/[slug]">): Promis
   return {
     title: post.title,
     description: post.dek,
-    openGraph: { type: "article", publishedTime: post.date, title: post.title, description: post.dek },
+    openGraph: {
+      type: "article",
+      publishedTime: post.date,
+      modifiedTime: post.date,
+      authors: [business.name],
+      tags: [post.tag],
+      title: post.title,
+      description: post.dek,
+      url: `/blog/${post.slug}`,
+      images: [OG_IMAGE],
+    },
+    ...canonical(`/blog/${post.slug}`),
   };
 }
 
@@ -29,6 +42,16 @@ export default async function PostPage(props: PageProps<"/blog/[slug]">) {
 
   return (
     <>
+      <JsonLd
+        data={[
+          postJsonLd(post),
+          breadcrumbJsonLd([
+            { name: "Journal", path: "/blog" },
+            { name: post.title, path: `/blog/${post.slug}` },
+          ]),
+        ]}
+      />
+
       <PageHero
         eyebrowLink={{ href: "/blog", label: "Journal" }}
         title={post.title}

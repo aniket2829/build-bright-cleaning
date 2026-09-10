@@ -13,7 +13,7 @@ Work top to bottom before this site is used commercially.
 | Email | `lib/content.ts` → `business.email` | Set to **navneetlotey2000@gmail.com**. Quote enquiries are emailed here over Gmail SMTP — see § 6 for the credentials it needs. `QUOTE_INBOX` overrides it without touching code. |
 | Coverage | `lib/content.ts` → `business.cities` and `cities` | **Edmonton only.** Calgary was removed from the coverage list, the city pages, the reviews and every page's copy. Adding a second city is a content change in `cities`; the home page grid and `/areas` already adapt. |
 | Trading hours | `lib/content.ts` → `business.hours` | |
-| Domain | `app/layout.tsx` → `metadataBase` | Currently `https://buildbright.example`. |
+| Domain | `lib/seo.ts` → `SITE_URL` | **Done.** Set to `https://buildbrightcleaning.ca` (apex, not www). Overridable per-environment with a `SITE_URL` variable for staging builds. Every canonical, the sitemap, robots.txt and the OG tags read it. Make sure `www.buildbrightcleaning.ca` redirects to the apex. |
 | Logo | `components/icons.tsx` → `Mark` | Authored SVG glyph (a doorway with light crossing the threshold). Replace or keep deliberately. |
 
 ## 2. Reviews

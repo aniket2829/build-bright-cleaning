@@ -1,6 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Container } from "@/components/page-parts";
 import { ArrowRight } from "@/components/icons";
+
+/* Next serves this with a 404 status, which is the signal that actually
+   matters; the noindex is belt-and-braces for the crawlers and scrapers that
+   index a body they liked regardless of the status line. */
+export const metadata: Metadata = {
+  title: "Page not found",
+  robots: { index: false, follow: true },
+};
 
 export default function NotFound() {
   return (

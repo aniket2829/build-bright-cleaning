@@ -5,6 +5,8 @@ import { Container, PageHero, Prose } from "@/components/page-parts";
 import { Rooms } from "@/components/rooms";
 import { ArrowRight, Check } from "@/components/icons";
 import { services, serviceBySlug } from "@/lib/content";
+import { JsonLd } from "@/components/json-ld";
+import { OG_IMAGE, breadcrumbJsonLd, canonical, serviceJsonLd } from "@/lib/seo";
 
 export function generateStaticParams() {
   return services.map((s) => ({ slug: s.slug }));
@@ -14,9 +16,22 @@ export async function generateMetadata(props: PageProps<"/services/[slug]">): Pr
   const { slug } = await props.params;
   const service = serviceBySlug(slug);
   if (!service) return {};
+
+  /* The title carries the city, because the query being answered is
+     "deep cleaning Edmonton", not "deep cleaning" — and the words a searcher
+     typed are what Google bolds in the result. */
+  const description = `${service.lede} Residential cleaning in Edmonton, Alberta.`;
   return {
-    title: service.name,
-    description: `${service.lede} Residential cleaning in Edmonton, Alberta.`,
+    title: `${service.name} in Edmonton`,
+    description,
+    openGraph: {
+      title: `${service.name} in Edmonton`,
+      description,
+      type: "website",
+      url: `/services/${service.slug}`,
+      images: [OG_IMAGE],
+    },
+    ...canonical(`/services/${service.slug}`),
   };
 }
 
@@ -30,6 +45,16 @@ export default async function ServicePage(props: PageProps<"/services/[slug]">) 
 
   return (
     <>
+      <JsonLd
+        data={[
+          serviceJsonLd(service),
+          breadcrumbJsonLd([
+            { name: "Services", path: "/services" },
+            { name: service.name, path: `/services/${service.slug}` },
+          ]),
+        ]}
+      />
+
       <PageHero
         eyebrowLink={{ href: "/services", label: "All services" }}
         title={service.name}

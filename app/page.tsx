@@ -5,6 +5,13 @@ import { ServiceIndex } from "@/components/service-index";
 import { Mop } from "@/components/mop";
 import { ArrowRight, Check, Key, Clock } from "@/components/icons";
 import { business, cities, reviews } from "@/lib/content";
+import { canonical } from "@/lib/seo";
+import type { Metadata } from "next";
+
+/* The home page inherits its title and description from the root layout, and
+   states only its canonical: without one, /?utm_source=… and / are two URLs to
+   a crawler, and the ad traffic dilutes the page that should rank. */
+export const metadata: Metadata = canonical("/");
 
 const steps = [
   {

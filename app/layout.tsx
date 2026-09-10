@@ -4,6 +4,10 @@ import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Warming } from "@/components/warming";
+import { Analytics } from "@/components/analytics";
+import { JsonLd } from "@/components/json-ld";
+import { business } from "@/lib/content";
+import { SITE_URL, businessJsonLd, websiteJsonLd } from "@/lib/seo";
 
 const vollkorn = Vollkorn({
   variable: "--font-vollkorn",
@@ -18,20 +22,59 @@ const schibsted = Schibsted_Grotesk({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://buildbright.example"),
+  /* The one absolute-URL decision on the site. Every canonical, OG image and
+     sitemap entry resolves against it — see lib/seo.ts. */
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Build Bright Cleaning · house cleaning in Edmonton",
     template: "%s · Build Bright Cleaning",
   },
   description:
     "Residential cleaning in Edmonton, Alberta. One vetted cleaner for deep, move-in/out, one-time and post-construction cleans, steam carpet cleaning and wall stain removal, quoted as a fixed price.",
+  applicationName: business.name,
+  /* No `keywords`: Google has ignored the meta tag since 2009 and stuffing it
+     is a spam signal on the sites that still read it. The words that matter
+     are in the headings and the copy. */
+  authors: [{ name: business.name, url: SITE_URL }],
+  creator: business.name,
+  publisher: business.name,
+  category: "Home services",
   openGraph: {
-    title: "Build Bright Cleaning",
+    title: "Build Bright Cleaning · house cleaning in Edmonton",
     description:
-      "One cleaner. The same one. Every time. House cleaning in Edmonton.",
+      "One cleaner. The same one. Every time. House cleaning in Edmonton and the towns around it.",
     type: "website",
     locale: "en_CA",
+    url: "/",
+    siteName: business.name,
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Build Bright Cleaning · house cleaning in Edmonton",
+    description:
+      "One cleaner. The same one. Every time. House cleaning in Edmonton and the towns around it.",
+  },
+  /* Explicit rather than implied. `max-image-preview: large` is what allows a
+     result to carry a full-width thumbnail instead of a favicon-sized one, and
+     it is off unless asked for. */
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  /* Search Console's HTML-tag verification, when that is the chosen method.
+     Unset in development, where the tag would be meaningless. */
+  verification: process.env.GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+    : undefined,
+  alternates: { canonical: "/" },
+  formatDetection: { telephone: true, address: false, email: false },
   /* The supplied icon set in /public, declared explicitly rather than through
      the app/icon file convention: the artwork is the brand's, not generated
      here, so there is one place it lives and one place it is referenced. */
@@ -64,6 +107,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-full flex-col bg-dusk-800">
         <div hidden dangerouslySetInnerHTML={{ __html: CONTRACT }} />
 
+        {/* Who this is, on every page, under one @id the per-page Service and
+            BlogPosting nodes point back at rather than re-describing. */}
+        <JsonLd data={[businessJsonLd(), websiteJsonLd()]} />
+
         <Warming />
 
         {/* the light you are walking toward, following --warmth across the whole document */}
@@ -89,6 +136,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <SiteFooter />
+        <Analytics />
       </body>
     </html>
   );

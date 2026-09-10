@@ -17,6 +17,26 @@ export const business = {
   email: "navneetlotey2000@gmail.com",
   region: "Edmonton",
   hours: "Mon–Sat, 7am–7pm MT",
+  /**
+   * The same trading hours a machine can read, for the
+   * `openingHoursSpecification` in `lib/seo.ts`. It sits beside `hours` rather
+   * than being parsed out of it so the sentence a visitor reads and the hours
+   * Google shows are edited in one place and cannot disagree.
+   */
+  hoursSpec: [
+    {
+      days: [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ],
+      opens: "07:00",
+      closes: "19:00",
+    },
+  ],
 };
 
 /**

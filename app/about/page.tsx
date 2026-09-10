@@ -3,11 +3,14 @@ import Link from "next/link";
 import { Container, PageHero, Prose } from "@/components/page-parts";
 import { ArrowRight } from "@/components/icons";
 import { business } from "@/lib/content";
+import { JsonLd } from "@/components/json-ld";
+import { breadcrumbJsonLd, canonical } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "About",
   description:
     "Why Build Bright sends the same cleaner to the same home every visit, what that costs us to run, and what we deliberately do not do.",
+  ...canonical("/about"),
 };
 
 const principles = [
@@ -32,6 +35,8 @@ const principles = [
 export default function AboutPage() {
   return (
     <>
+      <JsonLd data={breadcrumbJsonLd([{ name: "About", path: "/about" }])} />
+
       <PageHero
         title="We built the version we wanted as customers."
         lede="Every one of us had the same experience of hiring a cleaning company: excellent for two months, then a different person each visit, then a slow decline nobody would name, then a cancellation."

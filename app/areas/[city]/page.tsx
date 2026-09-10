@@ -5,6 +5,8 @@ import { Container, PageHero, Prose, Stars } from "@/components/page-parts";
 import { ServiceIndex } from "@/components/service-index";
 import { ArrowRight } from "@/components/icons";
 import { cities, cityBySlug, reviews } from "@/lib/content";
+import { JsonLd } from "@/components/json-ld";
+import { OG_IMAGE, breadcrumbJsonLd, canonical, cityJsonLd } from "@/lib/seo";
 
 export function generateStaticParams() {
   return cities.map((c) => ({ city: c.slug }));
@@ -14,9 +16,19 @@ export async function generateMetadata(props: PageProps<"/areas/[city]">): Promi
   const { city: slug } = await props.params;
   const city = cityBySlug(slug);
   if (!city) return {};
+
+  const description = `${city.lede} Deep, move-in/out, one-time and post-construction cleans, steam carpet cleaning and wall stain removal across ${city.name}, quoted as a fixed price.`;
   return {
     title: `House cleaning in ${city.name}`,
-    description: `${city.lede} Deep, move-in/out, one-time and post-construction cleans, steam carpet cleaning and wall stain removal across ${city.name}, quoted as a fixed price.`,
+    description,
+    openGraph: {
+      title: `House cleaning in ${city.name}`,
+      description,
+      type: "website",
+      url: `/areas/${city.slug}`,
+      images: [OG_IMAGE],
+    },
+    ...canonical(`/areas/${city.slug}`),
   };
 }
 
@@ -29,6 +41,16 @@ export default async function CityPage(props: PageProps<"/areas/[city]">) {
 
   return (
     <>
+      <JsonLd
+        data={[
+          cityJsonLd(city),
+          breadcrumbJsonLd([
+            { name: "Where we clean", path: "/areas" },
+            { name: city.name, path: `/areas/${city.slug}` },
+          ]),
+        ]}
+      />
+
       <PageHero
         eyebrowLink={{ href: "/areas", label: "All areas" }}
         title={`House cleaning in ${city.name}`}
