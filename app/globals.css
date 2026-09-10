@@ -631,14 +631,14 @@ a {
 .floor-wet {
   position: absolute;
   top: var(--floor);
-  height: clamp(7px, 0.78vw, 11px);
+  height: clamp(9px, 0.95vw, 14px);
   transform: translate(-50%, -50%);
   background: radial-gradient(
     closest-side,
-    color-mix(in oklab, var(--color-amber-500) 38%, transparent),
-    transparent 76%
+    color-mix(in oklab, var(--color-amber-500) 46%, transparent),
+    transparent 78%
   );
-  filter: blur(4px);
+  filter: blur(5px);
   animation: wet-dry 2600ms ease-out both;
 }
 

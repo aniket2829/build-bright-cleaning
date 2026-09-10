@@ -147,15 +147,6 @@ function MopHead({ className = "" }: { className?: string }) {
         <circle cx="57" cy="16.6" r="1.7" />
         <circle cx="91" cy="16.6" r="1.7" />
       </g>
-
-      {/* The swivel clevis the handle pins into. fill-rule punches the pin hole
-          for real, so it reads as a hole on any ground. */}
-      <path
-        fillRule="evenodd"
-        d="M66.4 0 L81.6 0 L81.6 13 L66.4 13 Z
-           M74 6.4 a2.4 2.4 0 1 0 0.01 0 Z"
-        fill="var(--color-frost-400)"
-      />
     </svg>
   );
 }
@@ -168,7 +159,7 @@ function MopHandle({ className = "" }: { className?: string }) {
       {/* Ash shaft, tapering toward the hand, with the hole it hangs by. */}
       <path
         fillRule="evenodd"
-        d="M13.2 4 L20.8 4 L22.4 190 L11.6 190 Z
+        d="M13.2 4 L20.8 4 L22.3 178 L11.7 178 Z
            M17 12 a2.4 2.4 0 1 0 0.01 0 Z"
         fill="var(--color-plaster-300)"
       />
@@ -179,9 +170,19 @@ function MopHandle({ className = "" }: { className?: string }) {
           <path key={y} d={`M12.6 ${y} L21.4 ${y}`} />
         ))}
       </g>
-      {/* Threaded collar down into the swivel. */}
-      <path d="M11.4 186 L22.6 186 L23.6 206 L10.4 206 Z" fill="var(--color-frost-400)" />
-      <path d="M10.9 195.4 L23.1 195.4 L23.2 198 L10.8 198 Z" fill="var(--color-frost-500)" />
+      {/* Threaded collar, then the swivel yoke it pins into. The yoke is drawn
+          on the handle rather than on the head because it leans with the
+          handle and the head does not — put it on the head and it detaches
+          into a floating tab the moment the handle goes over. It also covers
+          the joint at every angle of the pass, which is what a real yoke does. */}
+      <path d="M11.2 174 L22.8 174 L23.6 192 L10.4 192 Z" fill="var(--color-frost-400)" />
+      <path d="M10.8 182.6 L23.2 182.6 L23.3 185.2 L10.7 185.2 Z" fill="var(--color-frost-500)" />
+      <path
+        fillRule="evenodd"
+        d="M9.4 190 L24.6 190 L24.6 210 L9.4 210 Z
+           M17 201.4 a2.5 2.5 0 1 0 0.01 0 Z"
+        fill="var(--color-frost-400)"
+      />
     </svg>
   );
 }
@@ -358,7 +359,7 @@ const WET = Array.from({ length: 18 }, (_, i) => {
     key: `wet-${i}`,
     x,
     w: 3.4 + noise(i + 401) * 1.4,
-    o: 0.3 + noise(i + 433) * 0.18,
+    o: 0.4 + noise(i + 433) * 0.2,
     delay: t,
   };
 });
