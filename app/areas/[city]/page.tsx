@@ -82,14 +82,43 @@ export default async function CityPage(props: PageProps<"/areas/[city]">) {
         </Container>
       </section>
 
-      <section className="warm-side bg-plaster-50 py-20 text-ink-700 sm:py-24">
+      {city.communities.length > 0 && (
+        <section className="warm-side bg-plaster-50 py-20 text-ink-700 sm:py-24">
+          <Container>
+            <div className="grid gap-x-16 gap-y-8 lg:grid-cols-[1fr_20rem]">
+              <div>
+                <h2 className="font-display display-tight max-w-[20ch] text-3xl leading-tight font-semibold text-ink-900 sm:text-4xl">
+                  And the towns around it
+                </h2>
+                <p className="measure mt-5 leading-relaxed text-ink-700">
+                  Separate municipalities, not districts of {city.name} — but close enough
+                  that one cleaner can keep a home in any of them on the same schedule. The
+                  terms do not change when you cross the city limits.
+                </p>
+              </div>
+              <ul className="flex flex-wrap gap-x-2 gap-y-2 self-start lg:mt-2">
+                {city.communities.map((place) => (
+                  <li
+                    key={place}
+                    className="rounded-full border border-plaster-300 px-3.5 py-1.5 text-sm text-ink-700"
+                  >
+                    {place}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Container>
+        </section>
+      )}
+
+      <section className="warm-side bg-plaster-100 py-20 text-ink-700 sm:py-24">
         <Container>
           <h2 className="font-display display-tight text-3xl leading-tight font-semibold text-ink-900 sm:text-4xl">
             What we clean in {city.name}
           </h2>
           <p className="measure mt-5 leading-relaxed text-ink-700">
-            The same six services across the city, quoted the same way. We do not charge more for
-            the harder winter.
+            The same six services everywhere we go, quoted the same way. We do not charge more
+            for the harder winter, or for the drive.
           </p>
           <div className="mt-12">
             <ServiceIndex tone="warm" />
@@ -98,7 +127,7 @@ export default async function CityPage(props: PageProps<"/areas/[city]">) {
       </section>
 
       {local.length > 0 && (
-        <section className="warm-side bg-plaster-100 py-20 text-ink-700 sm:py-24">
+        <section className="warm-side bg-plaster-50 py-20 text-ink-700 sm:py-24">
           <Container>
             <h2 className="font-display display-tight text-3xl leading-tight font-semibold text-ink-900 sm:text-4xl">
               {city.name} clients

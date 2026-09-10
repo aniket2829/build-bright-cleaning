@@ -34,7 +34,7 @@ Visitors are comparison-shopping local cleaning companies, frequently on a phone
 
 - Single conversion path: **request a quote**. A quote form is the primary call to action across the site.
 - Services offered: deep cleaning, move-in/move-out cleaning, one-time cleans, post-construction cleaning, steam carpet cleaning, and wall stain removal. Residential only; no commercial offering.
-- Service area: Edmonton only.
+- Service area: Edmonton and nine surrounding communities in the metro region — St. Albert, Stony Plain, Spruce Grove, Beaumont, Leduc, Fort Saskatchewan, Devon, Sherwood Park and Morinville. Specified by the user on 2026-09-11, replacing the earlier Edmonton-only boundary. These are separate municipalities, so they are held in `serviceArea` in `lib/content.ts` and never in a city's `neighbourhoods` list.
 - Confirmed since the shape interview: a phone number is offered as a secondary path beside the form; a journal (blog) is part of the site.
 - **No figures anywhere.** The user later directed that all pricing and all visit durations be removed from the site. There are no starting-at prices, no rate card, no live estimate, no hour ranges and no cadence lines; `/pricing` was deleted. The site still states the pricing *model* (a fixed price for the job, never hourly) and routes every cost question to the quote form, where a person prices it by hand.
 - The quote form emails enquiries to the business over Gmail SMTP (`lib/mailer.ts`); the destination is `QUOTE_INBOX`, defaulting to `business.email`. It needs `SMTP_USER` and a Google App Password in `SMTP_PASSWORD` to send, and nothing is stored, so a failed send loses the enquiry.

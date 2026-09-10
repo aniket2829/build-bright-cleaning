@@ -74,7 +74,7 @@ export async function submitQuote(
   if (addressCity.length < 2) errors.addressCity = "Add the city or town.";
   if (!POSTAL.test(postal)) errors.postal = "Add a postal code, like T5K 2M6.";
   if (!cities.some((c) => c.slug === city))
-    errors.city = `We currently clean in ${business.cities.join(" and ")} only.`;
+    errors.city = `We currently clean in ${business.region} and the communities around it only.`;
   if (!SCHEDULES.includes(schedule)) errors.schedule = "Choose how often you would like us.";
   if (date && Number.isNaN(new Date(date).getTime())) errors.date = "That date did not read properly.";
   if (name.length < 2) errors.name = "Add the name we should ask for at the door.";

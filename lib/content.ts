@@ -15,9 +15,39 @@ export const business = {
   phoneDisplay: "(825) 963-3038",
   phoneHref: "+18259633038",
   email: "navneetlotey2000@gmail.com",
-  cities: ["Edmonton"] as const,
+  region: "Edmonton",
   hours: "Mon–Sat, 7am–7pm MT",
 };
+
+/**
+ * The service area: Edmonton and the communities that ring it, in the order
+ * the client gave them.
+ *
+ * These are separate municipalities, not Edmonton neighbourhoods — Leduc and
+ * St. Albert are their own cities, Devon and Morinville their own towns, and
+ * Sherwood Park is a hamlet in Strathcona County. That is why they live here
+ * and never in `City.neighbourhoods`: a list headed "Neighbourhoods we work
+ * in" that contained Fort Saskatchewan would have the site assert something
+ * about Alberta municipal geography that is simply false.
+ *
+ * This is the one place the list is written. Copy, metadata and the areas page
+ * all read from it.
+ */
+export const serviceArea = [
+  "Edmonton",
+  "St. Albert",
+  "Stony Plain",
+  "Spruce Grove",
+  "Beaumont",
+  "Leduc",
+  "Fort Saskatchewan",
+  "Devon",
+  "Sherwood Park",
+  "Morinville",
+] as const;
+
+/** Everything in the service area except the anchor city itself. */
+export const surroundingCommunities: string[] = serviceArea.filter((c) => c !== "Edmonton");
 
 /* --------------------------------------------------------------------------
    Services
@@ -515,6 +545,8 @@ export type City = {
   lede: string;
   body: string[];
   neighbourhoods: string[];
+  /** Separate municipalities we also cover from here. Never neighbourhoods. */
+  communities: string[];
   note: string;
 };
 
@@ -544,6 +576,7 @@ export const cities: City[] = [
       "Oliver",
       "Belgravia",
     ],
+    communities: surroundingCommunities,
     note: "Edmonton quotes are returned within one working day.",
   },
 ];

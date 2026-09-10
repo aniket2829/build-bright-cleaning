@@ -367,7 +367,7 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
               {step === 2 && (
                 <Fieldset
                   legend="Service address"
-                  hint={`Where the clean happens. We work in ${ONLY_CITY?.name ?? "Edmonton"} and nowhere else, so the postcode is how we check we can cover you.`}
+                  hint={`Where the clean happens. We work in ${ONLY_CITY?.name ?? "Edmonton"} and the communities around it, so the postcode is how we check we can cover you.`}
                 >
                   <div className="flex flex-col gap-6">
                     <Field label="Address line 1" id="address1" error={state.errors?.address1}>

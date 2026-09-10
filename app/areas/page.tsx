@@ -2,20 +2,20 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Container, PageHero } from "@/components/page-parts";
 import { ArrowRight } from "@/components/icons";
-import { cities } from "@/lib/content";
+import { cities, surroundingCommunities } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Where we clean",
   description:
-    "Build Bright cleans homes across Edmonton: the neighbourhoods we cover and how quickly a quote comes back.",
+    "Build Bright cleans homes in Edmonton and the communities around it — St. Albert, Sherwood Park, Spruce Grove, Leduc and more — with the neighbourhoods we cover and how quickly a quote comes back.",
 };
 
 export default function AreasPage() {
   return (
     <>
       <PageHero
-        title="One city, and we say no to the rest."
-        lede="We only take work where we can hold the same cleaner on the same schedule. That keeps the map small on purpose: Edmonton, and nothing we cannot cover properly."
+        title="Edmonton, and the towns around it."
+        lede="We only take work where we can hold the same cleaner on the same schedule, so the map stops at the edge of the region. Ten communities, and nothing we cannot cover properly."
       />
 
       <section className="warm-side bg-plaster-100 pt-20 pb-24 text-ink-700 sm:pt-24">
@@ -63,6 +63,44 @@ export default function AreasPage() {
                 </div>
               </li>
             ))}
+
+            {/* The surrounding municipalities. Deliberately a separate row from
+                the city entries above and from their neighbourhood chips: these
+                are their own towns, and the page must not imply otherwise. */}
+            <li className="border-b border-plaster-300 py-12">
+              <div className="grid gap-x-12 gap-y-8 lg:grid-cols-[20rem_1fr]">
+                <div>
+                  <h2 className="font-display display-tight text-4xl leading-tight font-semibold text-ink-900 sm:text-5xl">
+                    Around the city
+                  </h2>
+                  <p className="mt-3 text-[0.9375rem] text-ink-500">
+                    Same cleaner, same fixed price.
+                  </p>
+                </div>
+
+                <div>
+                  <p className="measure text-lg leading-relaxed text-ink-900">
+                    We cross the city limits for the communities that ring Edmonton, on the
+                    same terms and the same schedule as anything inside it. Further out than
+                    this we turn down, because we cannot hold one cleaner to it.
+                  </p>
+                  <ul className="mt-7 flex flex-wrap gap-x-2 gap-y-2">
+                    {surroundingCommunities.map((place) => (
+                      <li
+                        key={place}
+                        className="rounded-full border border-plaster-300 px-3.5 py-1.5 text-sm text-ink-700"
+                      >
+                        {place}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-5 text-[0.9375rem] text-ink-500">
+                    Just past one of these? Ask anyway. The line is where we can still keep
+                    the promise, not a fence.
+                  </p>
+                </div>
+              </div>
+            </li>
           </ul>
         </Container>
       </section>
