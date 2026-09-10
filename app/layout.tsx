@@ -48,9 +48,9 @@ export const metadata: Metadata = {
 
 const CONTRACT = `<!--
 THESIS: The site is the walk from a cold street into a warm, handled house; it refuses the aqua-bubbles-and-sparkles cleaning page and its muted-sage opposite.
-OWN-WORLD: Winter-dusk ground (#0E1726) warming to plaster (#EFE7DA); lamp amber (#E8A33D) is the action colour and nothing else wears it; Vollkorn display over Schibsted Grotesk; one ruled index every service is listed on; the only drawn mark on the site is the hero broom, flat and exact, never shaded or perspectived.
+OWN-WORLD: Winter-dusk ground (#0E1726) warming to plaster (#EFE7DA); lamp amber (#E8A33D) is the action colour and nothing else wears it; Vollkorn display over Schibsted Grotesk; one ruled index every service is listed on; the only drawn mark on the site is the hero mop, flat and exact, never shaded or perspectived.
 STORY: A homeowner comparing three cleaners at 9pm learns that one vetted person keeps their home, sees exactly what each service covers, and asks for a quote.
-FIRST VIEWPORT: Flat dusk ground. A broom crosses once from the left and the headline, lede, amber quote action and ruled footnote arrive staggered in its wake; it then settles into the open right half and keeps sweeping, joined by a smaller broom on a slower cycle. The left column is narrow, the hero short, so the same-cleaner argument arrives near the fold.
+FIRST VIEWPORT: Flat dusk ground. A string mop crosses once from the left and the headline, lede, amber quote action and ruled footnote arrive staggered in its wake; it then works the open right half in three unequal passes, wiping the floor marks it reaches and leaving a damp sheen that dries behind it. The left column is narrow, the hero short, so the same-cleaner argument arrives near the fold.
 FORM: Threshold, candidate 1 of the grounded list, taken by the user over assigned candidate 6 (House Signage). Seed key bb01alpha.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 -->`;

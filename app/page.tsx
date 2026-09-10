@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Aperture } from "@/components/aperture";
 import { Container, Stars } from "@/components/page-parts";
 import { ServiceIndex } from "@/components/service-index";
-import { Sweep } from "@/components/sweep";
+import { Mop } from "@/components/mop";
 import { ArrowRight, Check, Key, Clock } from "@/components/icons";
 import { business, cities, reviews } from "@/lib/content";
 
@@ -46,7 +46,7 @@ export default function Home() {
     <>
       {/* ------------------------------------------------------------- hero */}
       <section className="relative overflow-hidden">
-        <Sweep />
+        <Mop />
 
         <Container className="relative">
           <div className="max-w-[36rem] pt-14 pb-16 sm:pt-20 sm:pb-20 lg:pt-28 lg:pb-24">

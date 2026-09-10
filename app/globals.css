@@ -165,268 +165,497 @@ a {
 }
 
 /* ---------------------------------------------------------------------------
-   THE SWEEP — the hero's authored moment. The floor starts dirty: dust rests
-   in the open right half, one broom enters mid-stroke and crosses, then works
-   the floor in real strokes — plant, drive, lift, carry back — pushing the
-   dust ahead of it into a pile. The pile disperses and from then on it works
-   clean ground. Transform and opacity only, so the whole thing stays on the
-   compositor.
+   THE PASS — the hero's authored moment. The floor starts dirty: dull marks
+   lie in the open right half, one string mop enters and crosses, then works
+   the floor in three unequal passes — wind back, drive out, pull home, advance
+   — wiping the marks it reaches and leaving a damp sheen that dries off behind
+   it. From then on it works clean ground. Transform and opacity only, so the
+   whole thing stays on the compositor.
 
-   The head travels because the body pivots at the hand: rotation about
-   `transform-origin: 50% 5%` throws the tips roughly ten times further than
-   the hand itself moves. components/sweep.tsx mirrors these timings so every
-   mote is swept at the moment the tips actually reach it — change a duration
-   or an easing here and change it there too.
+   THE HEAD LIES ON THE FLOOR AND THE HANDLE LEANS OVER IT. That is the whole
+   reason this is a mop and not the broom it replaces: `.mop-handle` rotates
+   about its own bottom edge, which is the swivel, which never moves — so floor
+   contact is structural rather than compensated frame by frame. `.mop-head`
+   turns about the same point at roughly a twelfth of the handle's angle, which
+   is what a swivel does.
 
-   Two knobs place the scene against the broom's stroke: --pile-x is where the
-   dust ends up (just past the far end of the stroke, so no pass ploughs
-   through it), --floor is roughly how far down the tips reach.
+   Five animations share one 11.4s cycle and one delay: the traverse on the
+   rail, the lean on the handle, the swivel on the head, the lift on the carry,
+   and the splay on the strands — that last one offset by --strand-lag, because
+   cloth does not turn when the handle turns. components/mop.tsx mirrors the
+   keyframe percentages and easings below so every mark and every wet patch is
+   timed to the moment the head actually reaches it. Change a percentage or an
+   easing here and change it in PATH there too.
+
+   Three knobs place the scene: --floor is the floor line, --mop-x is where the
+   head rests at the top of the cycle (it must equal PATH[0].x), and --mop-w
+   sizes the whole implement.
    --------------------------------------------------------------------------- */
 
-.broom-stage {
+.mop-stage {
   position: absolute;
   inset: 0;
   overflow: hidden;
   pointer-events: none;
-  --pile-x: 76.8%;
-  --floor: 55.8%;
-  --stroke: 4200ms;
-  --stroke-start: 1200ms;
+  --floor: 66%;
+  --mop-x: 54%;
+  --mop-w: clamp(112px, 11.6vw, 168px);
+  /* Swivel to floor. The head's viewBox is 148x92 with the band at y=22 and
+     the strand tips resting around y=80, so the tips sit 0.392 of the head's
+     width below the band — which is what puts them on the floor line at every
+     size. Re-derive this if the head's viewBox changes. */
+  --head-h: calc(var(--mop-w) * 0.392);
+  --cycle: 11400ms;
+  --cycle-start: 1200ms;
+  --strand-lag: 110ms;
 }
 
-.broom {
+/* Beat two: it arrives from the left and is set down, fading in before it
+   clears the text column. It ends at translateX(0), which is the cycle's own
+   0% frame, so the handover is seamless — during the entrance the cycle holds
+   that frame by backwards fill. */
+.mop {
   position: absolute;
-  transform-origin: 50% 6%;
+  left: 0;
+  right: 0;
+  top: calc(var(--floor) - var(--head-h));
+  height: 0;
 }
 
-.broom-mark {
-  display: block;
-  width: 100%;
-  height: auto;
+.mop--lead {
+  animation: mop-enter 1200ms var(--ease-threshold) both;
 }
 
-/* the ground it has just passed over */
-.broom-trace {
-  position: absolute;
-  left: 50%;
-  bottom: -7%;
-  width: 96%;
-  height: 16%;
-  transform: translateX(-50%);
-  background: radial-gradient(
-    closest-side,
-    color-mix(in oklab, var(--color-amber-500) 34%, transparent),
-    transparent 72%
-  );
-  filter: blur(7px);
-}
-
-/* Beat two: it arrives already mid-stroke and crosses, delivering the content.
-   It ends at rotate(0) so the stroke below owns the whole resting pose and the
-   handover is seamless — during the entrance the stroke holds its own 0%
-   frame by backwards fill. */
-.broom--lead {
-  top: 12%;
-  left: 60%;
-  width: clamp(104px, 11.5vw, 168px);
-  animation: broom-enter 1200ms var(--ease-threshold) both;
-}
-
-@keyframes broom-enter {
+@keyframes mop-enter {
   0% {
-    transform: translate(-230%, 10.02%) rotate(-34deg);
+    transform: translateX(-14%);
     opacity: 0;
   }
-  12% {
+  16% {
     opacity: 1;
   }
   100% {
-    transform: translate(0, 0) rotate(0deg);
+    transform: translateX(0);
     opacity: 1;
   }
 }
 
-/* Beats three and four: the working stroke. Per-keyframe timing functions give
-   the push its own commit-and-settle curve and the carry back a softer one, so
-   the cycle reads as work rather than as a pendulum.
-
-   `translate` comes before `rotate` on purpose: it has to be a plain
-   screen-space offset, not one applied in the already-rotated frame. The Y
-   values are floor compensation. Pivoting at the hand swings the tips up an
-   arc, so without them the broom climbs clear of the floor as it leans — the
-   tell that separates a sweep from a mark rocking in place. Each is
-   292/325 * (1 - cos angle), the height the tips would otherwise gain, in
-   percent of the broom box; the last two subtract 2.6% more so the carry back
-   rides above the ground instead of dragging the dust home again. */
-.broom-arc {
-  transform-origin: 50% 5%;
-  animation: broom-stroke var(--stroke) var(--stroke-start) both infinite;
+/* A full-width, zero-height rail, so a translateX in percent resolves against
+   the hero rather than against the mop — the same trick the floor uses, and
+   what lets the traverse be written in the same units the marks are placed in
+   with nothing measured at runtime. */
+.mop-rail {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  animation: mop-pass var(--cycle) var(--cycle-start) both infinite;
 }
 
-@keyframes broom-stroke {
-  /* planted, wound back, about to push */
+/* Beats three and four. Per-keyframe timing functions give each drive its own
+   commit-and-settle curve and each pull home a softer one, so the cycle reads
+   as work rather than as a pendulum. The three passes are deliberately unequal
+   in reach and duration and each advances down the floor, so the loop period
+   is three strokes long and much harder to catch. */
+@keyframes mop-pass {
+  /* planted */
   0% {
-    transform: translate(-9%, 0.49%) rotate(6deg);
-    animation-timing-function: cubic-bezier(0.38, 0, 0.22, 1);
+    transform: translateX(0);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.5, 1);
   }
-  /* the drive: the head has crossed the floor and is loaded against it */
-  42% {
-    transform: translate(8%, 7.77%) rotate(-24deg);
+  /* wound back, about to drive */
+  3.684% {
+    transform: translateX(-2%);
+    animation-timing-function: cubic-bezier(0.36, 0, 0.2, 1);
+  }
+  /* pass one, out */
+  16.491% {
+    transform: translateX(18%);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.28, 1);
+  }
+  /* pass one, home — a mop cleans on the return too */
+  26.491% {
+    transform: translateX(4%);
+    animation-timing-function: cubic-bezier(0.36, 0, 0.2, 1);
+  }
+  /* pass two, out */
+  39.825% {
+    transform: translateX(24.5%);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.28, 1);
+  }
+  /* pass two, home */
+  50.175% {
+    transform: translateX(10%);
+    animation-timing-function: cubic-bezier(0.36, 0, 0.2, 1);
+  }
+  /* pass three, out — the furthest reach of the cycle */
+  62.632% {
+    transform: translateX(28%);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.28, 1);
+  }
+  /* pass three, home */
+  72.807% {
+    transform: translateX(15%);
     animation-timing-function: cubic-bezier(0.4, 0, 0.5, 1);
   }
-  /* lift, so the carry back does not drag the dust back with it */
-  52% {
-    transform: translate(7%, 2.82%) rotate(-20deg);
-    animation-timing-function: cubic-bezier(0.45, 0, 0.5, 1);
+  /* carried back over ground already done, off the floor */
+  89.474% {
+    transform: translateX(-2%);
+    animation-timing-function: cubic-bezier(0.34, 0, 0.24, 1);
   }
-  /* carried back over the ground already done */
-  88% {
-    transform: translate(-9%, -1.73%) rotate(8deg);
-    animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
-  }
-  /* set down for the next one */
+  /* set down for the next cycle */
   100% {
-    transform: translate(-9%, 0.49%) rotate(6deg);
+    transform: translateX(0);
   }
 }
 
-/* The bristles load against the floor through the drive and release on the
-   lift. This is the secondary motion that separates a swept broom from a
-   rotated rectangle. */
-.broom-bristles {
-  transform-box: view-box;
-  transform-origin: 60px 150px;
-  animation: bristle-splay var(--stroke) var(--stroke-start) both infinite;
+/* The zero-size anchor everything hangs off: the swivel. It carries only the
+   lift, so the handle and head rise together at the end of the third pass. */
+.mop-carry {
+  position: absolute;
+  left: var(--mop-x);
+  width: 0;
+  height: 0;
+  animation: mop-lift var(--cycle) var(--cycle-start) both infinite;
 }
 
-@keyframes bristle-splay {
+@keyframes mop-lift {
+  0%,
+  72.807% {
+    transform: translateY(0);
+  }
+  77% {
+    transform: translateY(calc(var(--mop-w) * -0.1));
+  }
+  86% {
+    transform: translateY(calc(var(--mop-w) * -0.1));
+  }
+  89.474%,
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* The handle pivots at its own bottom edge — the swivel — so the contact point
+   is fixed by construction and only the hands move. The lean runs further than
+   the head does, which is what puts the hands roughly six-tenths of the head's
+   travel behind it: arm work, not a swinging pole. */
+.mop-handle {
+  position: absolute;
+  display: block;
+  left: 0;
+  bottom: 0;
+  margin-left: calc(var(--mop-w) * -0.105);
+  width: calc(var(--mop-w) * 0.21);
+  height: auto;
+  transform-origin: 50% 100%;
+  animation: mop-lean var(--cycle) var(--cycle-start) both infinite;
+}
+
+@keyframes mop-lean {
   0% {
-    transform: scaleX(1.01) scaleY(0.995);
+    transform: rotate(2deg);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.5, 1);
   }
-  42% {
-    transform: scaleX(1.075) scaleY(0.972);
+  3.684% {
+    transform: rotate(4deg);
+    animation-timing-function: cubic-bezier(0.36, 0, 0.2, 1);
+  }
+  16.491% {
+    transform: rotate(-20deg);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.28, 1);
+  }
+  26.491% {
+    transform: rotate(-3deg);
+    animation-timing-function: cubic-bezier(0.36, 0, 0.2, 1);
+  }
+  39.825% {
+    transform: rotate(-28deg);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.28, 1);
+  }
+  50.175% {
+    transform: rotate(-10deg);
+    animation-timing-function: cubic-bezier(0.36, 0, 0.2, 1);
+  }
+  62.632% {
+    transform: rotate(-32deg);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.28, 1);
+  }
+  72.807% {
+    transform: rotate(-16deg);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.5, 1);
+  }
+  89.474% {
+    transform: rotate(4deg);
+    animation-timing-function: cubic-bezier(0.34, 0, 0.24, 1);
+  }
+  100% {
+    transform: rotate(2deg);
+  }
+}
+
+/* The head turns about the same swivel at about a twelfth of the handle's
+   angle. It is nearly flat on the floor at every point of the cycle, which is
+   the difference between a mop and a stick with a shape on the end. */
+.mop-head {
+  position: absolute;
+  display: block;
+  left: 0;
+  top: calc(var(--mop-w) * -0.149);
+  margin-left: calc(var(--mop-w) * -0.5);
+  width: var(--mop-w);
+  height: auto;
+  transform-origin: 50% 23.9%;
+  animation: mop-swivel var(--cycle) var(--cycle-start) both infinite;
+}
+
+@keyframes mop-swivel {
+  0% {
+    transform: rotate(0.2deg);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.5, 1);
+  }
+  3.684% {
+    transform: rotate(0.5deg);
+    animation-timing-function: cubic-bezier(0.36, 0, 0.2, 1);
+  }
+  16.491% {
+    transform: rotate(-2.4deg);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.28, 1);
+  }
+  26.491% {
+    transform: rotate(-0.4deg);
+    animation-timing-function: cubic-bezier(0.36, 0, 0.2, 1);
+  }
+  39.825% {
+    transform: rotate(-3.4deg);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.28, 1);
+  }
+  50.175% {
+    transform: rotate(-1.2deg);
+    animation-timing-function: cubic-bezier(0.36, 0, 0.2, 1);
+  }
+  62.632% {
+    transform: rotate(-3.8deg);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.28, 1);
+  }
+  72.807% {
+    transform: rotate(-1.9deg);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.5, 1);
+  }
+  89.474% {
+    transform: rotate(0.5deg);
+    animation-timing-function: cubic-bezier(0.34, 0, 0.24, 1);
+  }
+  100% {
+    transform: rotate(0.2deg);
+  }
+}
+
+/* THE STRANDS. The single most important thing in this file: they run the same
+   cycle --strand-lag behind the handle, so on every change of direction they
+   trail, catch up and overshoot. skewX rather than rotate, because the band
+   holds the roots still and it is the tips that lag. They fan wide and flatten
+   under load on each drive, gather on each pull, and — the detail that sells
+   it — hang together in a narrow bundle the moment they leave the floor. */
+.mop-strands {
+  transform-box: view-box;
+  transform-origin: 74px 22px;
+  animation: mop-splay var(--cycle) calc(var(--cycle-start) + var(--strand-lag)) both infinite;
+}
+
+@keyframes mop-splay {
+  0% {
+    transform: skewX(2deg) scale(1, 1);
+  }
+  4% {
+    transform: skewX(4deg) scale(0.98, 1.01);
+  }
+  /* driving out: trailing left, fanned wide, pressed flat */
+  10% {
+    transform: skewX(-14deg) scale(1.18, 0.93);
+  }
+  16.5% {
+    transform: skewX(-6deg) scale(1.1, 0.96);
+  }
+  /* the turn: they overshoot forward, then whip back the other way */
+  19% {
+    transform: skewX(3deg) scale(1.05, 0.98);
+  }
+  23% {
+    transform: skewX(12deg) scale(1.13, 0.95);
+  }
+  26.5% {
+    transform: skewX(5deg) scale(1.06, 0.97);
+  }
+  33% {
+    transform: skewX(-15deg) scale(1.2, 0.92);
+  }
+  39.8% {
+    transform: skewX(-6deg) scale(1.1, 0.96);
+  }
+  43% {
+    transform: skewX(11deg) scale(1.12, 0.95);
+  }
+  50.2% {
+    transform: skewX(4deg) scale(1.05, 0.98);
   }
   56% {
-    transform: scaleX(1) scaleY(1);
+    transform: skewX(-14deg) scale(1.19, 0.93);
+  }
+  62.6% {
+    transform: skewX(-6deg) scale(1.1, 0.96);
+  }
+  66% {
+    transform: skewX(10deg) scale(1.12, 0.95);
+  }
+  72.8% {
+    transform: skewX(4deg) scale(1.02, 0.99);
+  }
+  /* off the floor: wet cloth gathers into a hanging bundle */
+  78% {
+    transform: skewX(7deg) scale(0.86, 1.08);
+  }
+  86% {
+    transform: skewX(-5deg) scale(0.84, 1.09);
+  }
+  89.5% {
+    transform: skewX(-2deg) scale(0.9, 1.05);
+  }
+  /* and spreads again as it is set down */
+  94% {
+    transform: skewX(4deg) scale(1.04, 0.98);
   }
   100% {
-    transform: scaleX(1.01) scaleY(0.995);
+    transform: skewX(2deg) scale(1, 1);
+  }
+}
+
+/* The damp directly under the head, right now. Edgeless light in the same
+   amber as the bloom — the lamp catching a wet floor, never a cast shadow. It
+   goes out while the mop is off the ground, which is the cheapest and clearest
+   reading of contact there is. */
+.mop-wet {
+  position: absolute;
+  left: 0;
+  top: var(--head-h);
+  margin-left: calc(var(--mop-w) * -0.78);
+  width: calc(var(--mop-w) * 1.56);
+  height: calc(var(--mop-w) * 0.15);
+  transform: translateY(-50%);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--color-amber-500) 22%, transparent),
+    transparent 78%
+  );
+  filter: blur(6px);
+  animation: mop-contact var(--cycle) var(--cycle-start) both infinite;
+}
+
+@keyframes mop-contact {
+  0%,
+  72.807% {
+    opacity: 0.78;
+  }
+  77% {
+    opacity: 0.05;
+  }
+  86% {
+    opacity: 0.05;
+  }
+  90.5% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0.78;
   }
 }
 
 /* ---------------------------------------------------------------------------
-   THE DUST — beat one, and what the strokes are for.
+   THE FLOOR — beat one, and what the passes are for.
 
-   Each mote is a full-width, zero-height rail so that a translateX in percent
-   resolves against the hero, not against the 3px dot it carries. That is what
-   lets every mote in the field travel to one shared --pile-x with no measuring
-   in JavaScript. Its --dur is however long the head still has to travel, so it
-   is pushed ahead of the bristles rather than sliding off on its own clock.
+   Marks are dull because the lamp is not catching them: cold frost mixed down
+   into the ground, the one thing on this page amber deliberately misses. They
+   lift when the head reaches them, smearing a few pixels the way it was going
+   first. The wet patches are the other half of that same event — the sheen
+   left behind, drying off a couple of seconds later — and each fires on the
+   first pass that covers it, so the trail grows rightward across the cycle
+   instead of blinking on every return.
    --------------------------------------------------------------------------- */
 
-.dust-mote {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: var(--y);
-  height: 0;
-  animation: mote-sweep var(--dur, 820ms) cubic-bezier(0.25, 0.62, 0.35, 1) both;
-}
-
-.dust-mote::before {
-  content: "";
-  position: absolute;
-  left: var(--x);
-  /* Flattened: dust lying on a floor you are looking across is an ellipse,
-     and a perfect circle is what makes a mote read as floating instead. */
-  height: calc(var(--s) * 0.6);
-  top: calc(var(--s) * -0.3);
-  width: var(--s);
-  border-radius: 50%;
-  opacity: var(--o);
-  /* lit by the same lamp the amber comes from, never a grey speck */
-  background: color-mix(in oklab, var(--color-amber-400) 62%, var(--color-frost-200));
-}
-
-.dust-mote--late {
-  animation-name: mote-scatter;
-  animation-timing-function: var(--ease-threshold);
-}
-
-@keyframes mote-sweep {
-  0% {
-    transform: none;
-    opacity: 1;
-  }
-  78% {
-    opacity: 1;
-  }
-  100% {
-    transform: translate(var(--dx), var(--dy));
-    opacity: 0;
-  }
-}
-
-@keyframes mote-scatter {
-  0%,
-  8% {
-    transform: none;
-    opacity: 1;
-  }
-  100% {
-    transform: translate(var(--dx), var(--dy));
-    opacity: 0;
-  }
-}
-
-/* What the strokes gather: a low mound with grit sitting on it, settling as
-   the first stroke lands, holding, then dispersing. One smooth shape here
-   reads as a spot of light, so the pile is built from the same specks that
-   arrived to make it. */
-.dust-pile {
-  position: absolute;
-  top: var(--floor);
-  left: var(--pile-x);
-  width: clamp(38px, 4.2vw, 62px);
-  height: clamp(8px, 0.9vw, 13px);
-  transform-origin: 50% 100%;
-  animation: pile-gather 3000ms 1500ms var(--ease-threshold) both;
-}
-
-.dust-pile-mound {
+.floor {
   position: absolute;
   inset: 0;
-  border-radius: 46% 54% 30% 34% / 88% 96% 20% 24%;
-  background: color-mix(in oklab, var(--color-amber-400) 52%, var(--color-frost-400));
-  opacity: 0.3;
-  filter: blur(2px);
 }
 
-.dust-grit {
+.floor-mark {
   position: absolute;
-  height: 1.9px;
+  animation: mark-lift 620ms cubic-bezier(0.3, 0, 0.2, 1) both;
+}
+
+/* The stain is its own element so the marks' own opacity does not multiply
+   down onto the grit sitting in it. */
+.floor-stain {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: color-mix(in oklab, var(--color-frost-400) 72%, var(--color-dusk-600));
+  filter: blur(2.2px);
+}
+
+.floor-speck {
+  position: absolute;
+  height: 2px;
   border-radius: 50%;
-  background: color-mix(in oklab, var(--color-amber-400) 62%, var(--color-frost-200));
+  /* Grit, not sparkle. It has to be brighter than the stain it sits in and
+     duller than anything the lamp is actually catching — this is the one
+     surface on the page amber deliberately misses. */
+  background: color-mix(in oklab, var(--color-frost-400) 60%, var(--color-dusk-600));
   transform: translate(-50%, -50%);
 }
 
-@keyframes pile-gather {
+@keyframes mark-lift {
   0% {
-    transform: translateX(-50%) scale(0.28, 0.08);
-    opacity: 0;
-  }
-  47%,
-  68% {
-    transform: translateX(-50%) scale(1, 1);
+    transform: translateX(-50%);
     opacity: 1;
   }
+  55% {
+    transform: translateX(calc(-50% + var(--smear) * 0.6)) scaleX(1.14);
+    opacity: 0.65;
+  }
   100% {
-    transform: translateX(-50%) scale(1.18, 0.68);
+    transform: translateX(calc(-50% + var(--smear))) scaleX(1.3);
     opacity: 0;
   }
 }
 
-/* the content the broom delivers */
+.floor-wet {
+  position: absolute;
+  top: var(--floor);
+  height: clamp(7px, 0.78vw, 11px);
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--color-amber-500) 38%, transparent),
+    transparent 76%
+  );
+  filter: blur(4px);
+  animation: wet-dry 2600ms ease-out both;
+}
+
+@keyframes wet-dry {
+  0% {
+    opacity: 0;
+  }
+  9%,
+  38% {
+    opacity: var(--wo);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* the content the mop delivers */
 @keyframes arrive {
   from {
     opacity: 0;
@@ -444,10 +673,10 @@ a {
 }
 
 @media (max-width: 767px) {
-  /* A full-width text column leaves no gutter to sweep, and a broom cropped
-     to a sliver of handle is worse than none. Desktop keeps the whole scene;
-     the phone keeps the short, plain hero instead. */
-  .broom-stage {
+  /* A full-width text column leaves no gutter to work, and a mop cropped to a
+     sliver of handle is worse than none. Desktop keeps the whole scene; the
+     phone keeps the short, plain hero instead. */
+  .mop-stage {
     display: none;
   }
 }
@@ -461,23 +690,32 @@ a {
     clip-path: none !important;
     filter: none !important;
   }
-  /* The hero renders finished: clean floor, broom standing where the pass
-     would have left it. A frozen frame of settled dust reads as a defect. */
-  .dust-field,
-  .dust-pile {
+  /* The hero renders finished: clean floor, no sheen, mop standing planted
+     where the pass would have left it. A frozen frame of half-wiped floor
+     reads as a defect. */
+  .floor {
     display: none;
   }
-  .broom-arc,
-  .broom-bristles,
+  .mop--lead,
+  .mop-rail,
+  .mop-carry,
+  .mop-strands,
   .arrive {
     animation: none !important;
     opacity: 1;
     transform: none;
   }
-  .broom--lead {
+  .mop-handle {
     animation: none !important;
-    opacity: 1;
-    transform: rotate(-13deg);
+    transform: rotate(-14deg);
+  }
+  .mop-head {
+    animation: none !important;
+    transform: rotate(-1.7deg);
+  }
+  .mop-wet {
+    animation: none !important;
+    opacity: 0.75;
   }
   *,
   *::before,
