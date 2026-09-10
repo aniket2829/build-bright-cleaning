@@ -17,7 +17,6 @@ const PHONE = /^[\d\s()+.-]{9,}$/;
 const POSTAL = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
 
 const SCHEDULES = ["one-time"];
-const TIME_SLOTS = ["morning", "afternoon", "evening"];
 
 const reference = (city: string) =>
   `BB-${city.slice(0, 3).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
@@ -39,10 +38,17 @@ export async function submitQuote(
 ): Promise<QuoteState> {
   const get = (k: string) => String(formData.get(k) ?? "").trim();
 
-  // Honeypot: the field is hidden from people and off the tab order, so
-  // anything in it came from something filling every input on the page.
-  // Answer exactly as a success would, so a bot learns nothing from the reply.
-  if (get("company")) {
+  // Honeypot: the field is display:none and off the tab order, so anything in
+  // it came from something filling every input on the page.
+  // Answer exactly as a success would, so a bot learns nothing from the reply —
+  // but log it, because a silent discard is indistinguishable from a delivered
+  // enquiry, both to whoever is testing the form and to a customer whose
+  // browser filled the field for them.
+  const honeypot = get("fax");
+  if (honeypot) {
+    console.warn(
+      `[quote] honeypot tripped, nothing sent. Field contained: ${JSON.stringify(honeypot)}`,
+    );
     return { status: "sent", reference: reference(get("city") || "edm") };
   }
 
@@ -55,7 +61,6 @@ export async function submitQuote(
   const city = get("city");
   const schedule = get("schedule");
   const date = get("date");
-  const timeSlot = get("timeSlot");
   const name = get("name");
   const email = get("email");
   const phone = get("phone");
@@ -72,8 +77,6 @@ export async function submitQuote(
     errors.city = `We currently clean in ${business.cities.join(" and ")} only.`;
   if (!SCHEDULES.includes(schedule)) errors.schedule = "Choose how often you would like us.";
   if (date && Number.isNaN(new Date(date).getTime())) errors.date = "That date did not read properly.";
-  if (timeSlot && !TIME_SLOTS.includes(timeSlot))
-    errors.timeSlot = "Pick morning, afternoon or evening.";
   if (name.length < 2) errors.name = "Add the name we should ask for at the door.";
   if (!EMAIL.test(email)) errors.email = "Add an email we can send the quote to.";
   if (phone && !PHONE.test(phone)) errors.phone = "That phone number is missing a few digits.";
@@ -110,7 +113,6 @@ export async function submitQuote(
       city: cities.find((c) => c.slug === city)?.name ?? city,
       schedule,
       date,
-      timeSlot,
       access: get("access"),
       name,
       email,

@@ -71,7 +71,6 @@ export type QuoteEnquiry = {
   city: string;
   schedule: string;
   date: string;
-  timeSlot: string;
   access: string;
   name: string;
   email: string;
@@ -88,7 +87,6 @@ const LABELS: Array<[keyof QuoteEnquiry, string]> = [
   ["city", "Service area"],
   ["schedule", "Schedule"],
   ["date", "Preferred date"],
-  ["timeSlot", "Preferred time"],
   ["access", "Access notes"],
   ["name", "Name"],
   ["email", "Email"],

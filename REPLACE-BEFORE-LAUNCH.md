@@ -76,10 +76,10 @@ The form now collects, and `submitQuote` now validates:
 | Service, bedrooms, bathrooms, pets, extras | As before. |
 | `address1`, `address2`, `addressCity`, `region`, `postal` | Service address. `addressCity` defaults to Edmonton and `region` to Alberta; `postal` is validated against the Canadian format. |
 | `schedule` | `one-time`. Required. |
-| `date`, `timeSlot` | Both optional. The date comes from the themed picker in `components/date-picker.tsx` (past dates disabled, local `YYYY-MM-DD`); `timeSlot` is `morning`, `afternoon` or `evening`. |
+| `date` | Optional. Comes from the themed picker in `components/date-picker.tsx` (past dates disabled, local `YYYY-MM-DD`). No time-of-day slot is collected: the visit time is agreed when a person answers the enquiry. |
 | `access`, `name`, `email`, `phone` | As before. |
 
-**The picked date and time are a preference, not a booking.** The form says so, and the confirmation says so. If you later make it a real booking, it needs availability behind it, or the promise stops being true.
+**The picked date is a preference, not a booking.** The form says so, and the confirmation says so. If you later make it a real booking, it needs availability behind it, or the promise stops being true.
 
 ## 7. Imagery
 

@@ -73,10 +73,6 @@ export default function Home() {
                 See what is included
               </Link>
             </div>
-
-            <p style={{ "--d": "620ms" } as React.CSSProperties} className="arrive mt-10 border-t border-dusk-700 pt-6 text-[0.9375rem] text-frost-200">
-              Quoted per job, never per hour · {business.hours}
-            </p>
           </div>
         </Container>
       </section>

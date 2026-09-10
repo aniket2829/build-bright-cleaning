@@ -71,10 +71,6 @@ export default function AboutPage() {
                 <h2 className="font-display text-2xl leading-tight font-semibold text-ink-900">
                   Straight answers
                 </h2>
-                <p className="mt-3 leading-relaxed text-ink-700">
-                  Call during {business.hours.toLowerCase()} and a person picks up. No queue, no
-                  script.
-                </p>
                 <a
                   href={`tel:${business.phoneHref}`}
                   className="tnum font-display mt-5 block text-2xl font-semibold text-ink-900 decoration-plaster-300 underline-offset-4 hover:decoration-ink-900"

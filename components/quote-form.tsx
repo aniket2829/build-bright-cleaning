@@ -13,12 +13,6 @@ export const SCHEDULES = [
   { value: "one-time", label: "One time", note: "A single visit, priced on its own." },
 ];
 
-export const TIME_SLOTS = [
-  { value: "morning", label: "Morning", note: "8am – 12pm" },
-  { value: "afternoon", label: "Afternoon", note: "12pm – 4pm" },
-  { value: "evening", label: "Evening", note: "4pm – 7pm" },
-];
-
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const POSTAL_RE = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
 
@@ -36,7 +30,6 @@ type Draft = {
   city: string;
   schedule: string;
   date: string;
-  timeSlot: string;
   access: string;
   name: string;
   email: string;
@@ -60,7 +53,6 @@ const EMPTY: Draft = {
   city: ONLY_CITY?.slug ?? "",
   schedule: "",
   date: "",
-  timeSlot: "",
   access: "",
   name: "",
   email: "",
@@ -84,7 +76,6 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
 
   const service = services.find((s) => s.slug === draft.service);
   const schedule = SCHEDULES.find((s) => s.value === draft.schedule);
-  const slot = TIME_SLOTS.find((t) => t.value === draft.timeSlot);
   const sent = state.status === "sent";
 
   const stepValid = (i: number) => {
@@ -127,9 +118,7 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
     : "";
 
   // The cadence has its own row, so this one carries only the appointment itself.
-  const whenLine = [draft.date ? longDate(draft.date) : null, slot?.label]
-    .filter(Boolean)
-    .join(" · ");
+  const whenLine = draft.date ? longDate(draft.date) : "";
 
   return (
     <div className="grid gap-12 lg:grid-cols-[1fr_23rem] lg:gap-16">
@@ -158,13 +147,7 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
               <Row term="Schedule" detail={schedule?.label ?? "Not given"} />
               <Row
                 term="Appointment"
-                detail={
-                  draft.date
-                    ? `${longDate(draft.date)}${slot ? ` · ${slot.label}` : ""}`
-                    : slot
-                      ? `${slot.label}, date to confirm`
-                      : "We will suggest times"
-                }
+                detail={draft.date ? longDate(draft.date) : "We will suggest times"}
               />
             </dl>
 
@@ -209,16 +192,22 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
             </ol>
 
             <form action={formAction} className="pt-10">
-              {/* Honeypot. Hidden from sight, from screen readers and from the
-                  tab order, and never autofilled, so only something filling
-                  every input on the page will put anything in it. Not
-                  type="hidden": bots skip those. */}
-              <div aria-hidden className="sr-only">
-                <label htmlFor="bb-company">Company</label>
+              {/* Honeypot. Not type="hidden", because bots skip those; hidden
+                  with display:none instead, which is what keeps it away from
+                  people. Two things fill a field no human can see: a spam bot
+                  reading the raw HTML, and a form-filler extension — and the
+                  latter, like browser autofill, skips display:none.
+
+                  The name is deliberately `fax`, not `company`: `company` maps
+                  to the `organization` autofill token, so a password manager
+                  would put a real customer's employer in it and their enquiry
+                  would be thrown away as spam. Nothing autofills a fax number. */}
+              <div aria-hidden style={{ display: "none" }}>
+                <label htmlFor="bb-fax">Fax</label>
                 <input
-                  id="bb-company"
+                  id="bb-fax"
                   type="text"
-                  name="company"
+                  name="fax"
                   tabIndex={-1}
                   autoComplete="off"
                   defaultValue=""
@@ -234,7 +223,6 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
               <input type="hidden" name="city" value={draft.city} />
               <input type="hidden" name="schedule" value={draft.schedule} />
               <input type="hidden" name="date" value={draft.date} />
-              <input type="hidden" name="timeSlot" value={draft.timeSlot} />
               {step !== 2 && (
                 <>
                   <input type="hidden" name="address1" value={draft.address1} />
@@ -501,48 +489,10 @@ export function QuoteForm({ initialService = "", initialCity = "" }) {
                   </Fieldset>
 
                   <Fieldset
-                    legend="Pick a date and time for the appointment"
+                    legend="Pick a date for the appointment"
                     hint="Optional, and not a confirmed booking. It tells us what you are aiming for; we come back with the nearest slot we can actually hold."
                   >
-                    <div className="flex flex-col gap-6">
-                      <DatePicker value={draft.date} onChange={(v) => set("date", v)} />
-
-                      <div>
-                        <p className="font-medium text-ink-900">Time of day</p>
-                        <div className="mt-3 grid gap-2 sm:grid-cols-3">
-                          {TIME_SLOTS.map((option) => {
-                            const on = draft.timeSlot === option.value;
-                            return (
-                              <label
-                                key={option.value}
-                                className={`cursor-pointer rounded-xl border px-5 py-3.5 transition-colors duration-300 ${
-                                  on
-                                    ? "border-ink-900 bg-ink-900 text-plaster-50"
-                                    : "border-plaster-300 text-ink-700 hover:border-ink-500"
-                                }`}
-                              >
-                                <input
-                                  type="radio"
-                                  name="time-slot-choice"
-                                  value={option.value}
-                                  checked={on}
-                                  onChange={() => set("timeSlot", on ? "" : option.value)}
-                                  className="sr-only"
-                                />
-                                <span className="block font-medium">{option.label}</span>
-                                <span
-                                  className={`tnum mt-0.5 block text-[0.9375rem] ${
-                                    on ? "text-plaster-300" : "text-ink-500"
-                                  }`}
-                                >
-                                  {option.note}
-                                </span>
-                              </label>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </div>
+                    <DatePicker value={draft.date} onChange={(v) => set("date", v)} />
                   </Fieldset>
 
                   <Field
