@@ -4,13 +4,16 @@ import { Container, PageHero, Prose } from "@/components/page-parts";
 import { ArrowRight } from "@/components/icons";
 import { business } from "@/lib/content";
 import { JsonLd } from "@/components/json-ld";
-import { breadcrumbJsonLd, canonical } from "@/lib/seo";
+import { SECTIONS, canonical, pageJsonLd } from "@/lib/seo";
+
+const page = SECTIONS.about;
+const description =
+  "Why Build Bright sends the same cleaner to the same home every visit, what that costs us to run, and what we deliberately do not do.";
 
 export const metadata: Metadata = {
-  title: "About",
-  description:
-    "Why Build Bright sends the same cleaner to the same home every visit, what that costs us to run, and what we deliberately do not do.",
-  ...canonical("/about"),
+  title: page.name,
+  description,
+  ...canonical(page.path),
 };
 
 const principles = [
@@ -35,9 +38,18 @@ const principles = [
 export default function AboutPage() {
   return (
     <>
-      <JsonLd data={breadcrumbJsonLd([{ name: "About", path: "/about" }])} />
+      <JsonLd
+        data={pageJsonLd({
+          path: page.path,
+          title: page.name,
+          description,
+          type: "AboutPage",
+          trail: [page],
+        })}
+      />
 
       <PageHero
+        breadcrumbs={[page]}
         title="We built the version we wanted as customers."
         lede="Every one of us had the same experience of hiring a cleaning company: excellent for two months, then a different person each visit, then a slow decline nobody would name, then a cancellation."
       />

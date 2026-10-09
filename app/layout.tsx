@@ -7,7 +7,14 @@ import { Warming } from "@/components/warming";
 import { Analytics } from "@/components/analytics";
 import { JsonLd } from "@/components/json-ld";
 import { business } from "@/lib/content";
-import { SITE_URL, businessJsonLd, websiteJsonLd } from "@/lib/seo";
+import {
+  SITE_DESCRIPTION,
+  SITE_TITLE,
+  SITE_URL,
+  TITLE_TEMPLATE,
+  businessJsonLd,
+  websiteJsonLd,
+} from "@/lib/seo";
 
 const vollkorn = Vollkorn({
   variable: "--font-vollkorn",
@@ -26,11 +33,10 @@ export const metadata: Metadata = {
      sitemap entry resolves against it — see lib/seo.ts. */
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Build Bright Cleaning · house cleaning in Edmonton",
-    template: "%s · Build Bright Cleaning",
+    default: SITE_TITLE,
+    template: TITLE_TEMPLATE,
   },
-  description:
-    "Residential cleaning in Edmonton, Alberta. One vetted cleaner for deep, move-in/out, one-time and post-construction cleans, steam carpet cleaning and wall stain removal, quoted as a fixed price.",
+  description: SITE_DESCRIPTION,
   applicationName: business.name,
   /* No `keywords`: Google has ignored the meta tag since 2009 and stuffing it
      is a spam signal on the sites that still read it. The words that matter
@@ -40,7 +46,7 @@ export const metadata: Metadata = {
   publisher: business.name,
   category: "Home services",
   openGraph: {
-    title: "Build Bright Cleaning · house cleaning in Edmonton",
+    title: SITE_TITLE,
     description:
       "One cleaner. The same one. Every time. House cleaning in Edmonton and the towns around it.",
     type: "website",
@@ -50,7 +56,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Build Bright Cleaning · house cleaning in Edmonton",
+    title: SITE_TITLE,
     description:
       "One cleaner. The same one. Every time. House cleaning in Edmonton and the towns around it.",
   },
@@ -107,8 +113,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-full flex-col bg-dusk-800">
         <div hidden dangerouslySetInnerHTML={{ __html: CONTRACT }} />
 
-        {/* Who this is, on every page, under one @id the per-page Service and
-            BlogPosting nodes point back at rather than re-describing. */}
+        {/* Who this is, on every page, under one @id the per-page WebPage,
+            Service and BlogPosting nodes point back at rather than
+            re-describing. Each page adds its own graph: see pageJsonLd. */}
         <JsonLd data={[businessJsonLd(), websiteJsonLd()]} />
 
         <Warming />

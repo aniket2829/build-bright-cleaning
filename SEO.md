@@ -17,8 +17,9 @@ optional and everything else fails without it.
 | Canonical URL on every page | `canonical()` in each `page.tsx` | Tells Google which URL is *the* URL, so `?utm_source=facebook` traffic credits the real page instead of splitting it. |
 | `sitemap.xml` | `app/sitemap.ts` | Generated from `lib/content.ts`. Add a service, city or post and it appears automatically. |
 | `robots.txt` | `app/robots.ts` | Allows everything and points at the sitemap. |
-| Business structured data | `lib/seo.ts` → `businessJsonLd()` | `HouseCleaningService` with phone, email, hours, and all ten service-area municipalities. This is what local results read. |
-| Per-page structured data | service / city / blog / FAQ pages | `Service`, `BlogPosting`, `FAQPage`, `BreadcrumbList`. |
+| Business structured data | `lib/seo.ts` → `businessJsonLd()` | `HouseCleaningService` (a LocalBusiness, therefore also the site's Organization) with phone, email, hours, contact point, square logo, and all ten service-area municipalities. This is what local results read. |
+| Per-page structured data | `lib/seo.ts` → `pageJsonLd()`, on every page | One `WebPage` node per URL, plus its `BreadcrumbList` and main entity. See § 1a. |
+| Visible breadcrumbs | `components/page-parts.tsx` → `Breadcrumbs` | Rendered by `PageHero` from the same trail the `BreadcrumbList` is built from. |
 | Share cards | `app/opengraph-image.tsx` | A generated 1200×630 card in the site's own colours, so links posted to Facebook, WhatsApp and iMessage look like a business. |
 | Crawl directives | `app/layout.tsx` → `robots` | Includes `max-image-preview: large`, which is what permits a full-width image in a result rather than a thumbnail. |
 | 404 excluded | `app/not-found.tsx` | `noindex`, so dead URLs never rank. |
@@ -35,6 +36,63 @@ untrue. Add it the day the reviews are real — see `REPLACE-BEFORE-LAUNCH.md` �
 
 **No `keywords` meta tag.** Google has ignored it since 2009. The words that
 matter are in the headings, the copy and the page titles, where they already are.
+
+### 1a. Structured data, page by page
+
+Every page emits two JSON-LD blocks. The root layout writes the site-wide
+nodes; the page writes its own. Each block is one `@graph` under a single
+`@context`, and the nodes point at each other by `@id` instead of repeating
+themselves. `<JsonLd>` (`components/json-ld.tsx`) does the wrapping and drops
+any node passed twice under the same `@id`.
+
+| Page | Page node | Also in the page's graph |
+|---|---|---|
+| Every page (layout) | — | `HouseCleaningService` `#business`, `WebSite` `#website` |
+| `/` | `WebPage`, `about` → business | — (no breadcrumb on the home page) |
+| `/about` | `AboutPage`, `about` → business | `BreadcrumbList` |
+| `/services`, `/areas`, `/blog` | `CollectionPage` | `BreadcrumbList` |
+| `/quote` | `ContactPage` | `BreadcrumbList` |
+| `/reviews` | `WebPage` (no review markup, see above) | `BreadcrumbList` |
+| `/faq` | `FAQPage`, with every question and answer as `mainEntity` | `BreadcrumbList` |
+| `/services/[slug]` | `WebPage`, `mainEntity` → `Service` | `BreadcrumbList`, `Service` |
+| `/areas/[city]` | `WebPage`, `mainEntity` → `Service` | `BreadcrumbList`, `Service` |
+| `/blog/[slug]` | `WebPage`, `mainEntity` → `BlogPosting` | `BreadcrumbList`, `BlogPosting` |
+| 404 | none | layout nodes only; the page is `noindex` |
+
+**How each page stays accurate**
+
+- **Titles and descriptions.** The page node's `name` is the page's full
+  `<title>`. Its `description` is the meta description. Both come from the
+  same constants the page's `metadata` uses: `SITE_TITLE`, `TITLE_TEMPLATE`
+  and `SITE_DESCRIPTION` in `lib/seo.ts`, plus a `description` const or
+  `…Title()`/`…Description()` helper in each page file.
+- **Breadcrumbs.** A page builds one `trail` (`SECTIONS.services` plus the
+  current page) and passes it to both `PageHero breadcrumbs={trail}` and
+  `pageJsonLd({ trail })`. The visible links and the markup are the same
+  array. Section names are spelled once, in `SECTIONS`.
+- **FAQ.** `/faq` passes the same `faqs` array it renders. Each answer sits in
+  a server-rendered `<details>` and is in the HTML whether open or shut.
+  Expect no FAQ rich result: since August 2023 Google shows them only for
+  well-known government and health sites. The markup is still valid, and Bing
+  and AI answer engines still read it. Mark up FAQs only on the page that
+  shows them in full. Don't copy the block onto service pages unless those
+  pages render the same questions.
+
+**Adding a page.** In the page component, render
+`<JsonLd data={pageJsonLd({ path, title, description, trail, type?, mainEntity? })} />`
+and give `PageHero` the same `trail`. Don't hand-write `@context` or a second
+business node.
+
+**Deliberately not marked up:** `Review`/`AggregateRating` (see above),
+`priceRange`/`Offer.price` (no prices on the site), a `WebSite`
+`SearchAction` (the site has no search), and `sameAs`. Add `sameAs` to
+`businessJsonLd()` once the Google Business Profile and any social profiles
+exist (§ 2).
+
+**Validate after any change.** Run `next build && next start`, then put a
+few URLs through <https://validator.schema.org/> and
+<https://search.google.com/test/rich-results>. One service page, one post and
+`/faq` cover every node type.
 
 ---
 

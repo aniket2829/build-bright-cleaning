@@ -2,21 +2,33 @@ import type { Metadata } from "next";
 import { Container, PageHero, Stars } from "@/components/page-parts";
 import { reviews } from "@/lib/content";
 import { JsonLd } from "@/components/json-ld";
-import { breadcrumbJsonLd, canonical } from "@/lib/seo";
+import { SECTIONS, canonical, pageJsonLd } from "@/lib/seo";
+
+const page = SECTIONS.reviews;
+const description =
+  "What Build Bright clients in Edmonton say about deep, move-out and post-construction cleans, carpet and wall work, and careful service.";
 
 export const metadata: Metadata = {
-  title: "Reviews",
-  description:
-    "What Build Bright clients in Edmonton say about deep, move-out and post-construction cleans, carpet and wall work, and careful service.",
-  ...canonical("/reviews"),
+  title: page.name,
+  description,
+  ...canonical(page.path),
 };
 
 export default function ReviewsPage() {
   return (
     <>
-      <JsonLd data={breadcrumbJsonLd([{ name: "Reviews", path: "/reviews" }])} />
+      <JsonLd
+        data={pageJsonLd({
+          path: page.path,
+          title: page.name,
+          description,
+          type: "WebPage",
+          trail: [page],
+        })}
+      />
 
       <PageHero
+        breadcrumbs={[page]}
         title="The reviews that matter say the same thing."
         lede="Not that the house was clean; everyone says that. That it was the same person, that the price held, and that they stopped tidying before the visit."
       />

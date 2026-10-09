@@ -5,7 +5,8 @@ import { ServiceIndex } from "@/components/service-index";
 import { Mop } from "@/components/mop";
 import { ArrowRight, Check, Key, Clock } from "@/components/icons";
 import { business, cities, reviews } from "@/lib/content";
-import { canonical } from "@/lib/seo";
+import { JsonLd } from "@/components/json-ld";
+import { SITE_DESCRIPTION, SITE_TITLE, canonical, pageJsonLd } from "@/lib/seo";
 import type { Metadata } from "next";
 
 /* The home page inherits its title and description from the root layout, and
@@ -51,6 +52,10 @@ export default function Home() {
 
   return (
     <>
+      <JsonLd
+        data={pageJsonLd({ path: "/", title: SITE_TITLE, description: SITE_DESCRIPTION, home: true })}
+      />
+
       {/* ------------------------------------------------------------- hero */}
       <section className="relative overflow-hidden">
         <Mop />

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Star } from "@/components/icons";
+import { withHome, type Crumb } from "@/lib/seo";
 
 export function Container({
   children,
@@ -13,14 +14,54 @@ export function Container({
   );
 }
 
+/**
+ * Where the visitor is, written out. The trail is the same array the page
+ * hands `pageJsonLd`, so the breadcrumb Google shows in a result and the one
+ * on the page are one list, not two that happen to agree. The last crumb is
+ * the current page: named, not linked.
+ */
+export function Breadcrumbs({ trail }: { trail: readonly Crumb[] }) {
+  const crumbs = withHome(trail);
+  return (
+    <nav aria-label="Breadcrumb">
+      <ol className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-[0.9375rem] text-frost-400">
+        {crumbs.map((crumb, i) => {
+          const last = i === crumbs.length - 1;
+          return (
+            <li key={crumb.path} className={`flex items-baseline gap-x-2 ${last ? "min-w-0" : ""}`}>
+              {last ? (
+                <span aria-current="page" className="block max-w-[32ch] truncate text-frost-200">
+                  {crumb.name}
+                </span>
+              ) : (
+                <>
+                  <Link
+                    href={crumb.path}
+                    className="decoration-dusk-600 underline-offset-4 transition-colors duration-300 hover:text-amber-400 hover:decoration-amber-400"
+                  >
+                    {crumb.name}
+                  </Link>
+                  <span aria-hidden className="text-dusk-600">
+                    /
+                  </span>
+                </>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}
+
 /** The dusk band every interior page opens in: outside, before the door. */
 export function PageHero({
-  eyebrowLink,
+  breadcrumbs,
   title,
   lede,
   meta,
 }: {
-  eyebrowLink?: { href: string; label: string };
+  breadcrumbs?: readonly Crumb[];
   title: string;
   lede?: string;
   meta?: React.ReactNode;
@@ -36,17 +77,10 @@ export function PageHero({
         }}
       />
       <Container className="relative">
-        {eyebrowLink && (
-          <Link
-            href={eyebrowLink.href}
-            className="inline-block text-[0.9375rem] text-frost-400 decoration-dusk-600 underline-offset-4 transition-colors duration-300 hover:text-amber-400 hover:decoration-amber-400"
-          >
-            ← {eyebrowLink.label}
-          </Link>
-        )}
+        {breadcrumbs && <Breadcrumbs trail={breadcrumbs} />}
         <h1
           className={`font-display display-tight max-w-[18ch] text-5xl leading-[1.02] font-semibold text-frost-100 sm:text-6xl lg:text-7xl ${
-            eyebrowLink ? "mt-6" : ""
+            breadcrumbs ? "mt-6" : ""
           }`}
         >
           {title}

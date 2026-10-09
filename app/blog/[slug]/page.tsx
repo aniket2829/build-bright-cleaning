@@ -5,7 +5,7 @@ import { Container, PageHero } from "@/components/page-parts";
 import { ArrowRight } from "@/components/icons";
 import { business, posts, postBySlug } from "@/lib/content";
 import { JsonLd } from "@/components/json-ld";
-import { OG_IMAGE, breadcrumbJsonLd, canonical, postJsonLd } from "@/lib/seo";
+import { OG_IMAGE, SECTIONS, canonical, pageJsonLd, postJsonLd } from "@/lib/seo";
 
 export function generateStaticParams() {
   return posts.map((p) => ({ slug: p.slug }));
@@ -39,21 +39,22 @@ export default async function PostPage(props: PageProps<"/blog/[slug]">) {
   if (!post) notFound();
 
   const more = posts.filter((p) => p.slug !== post.slug).slice(0, 2);
+  const trail = [SECTIONS.blog, { name: post.title, path: `/blog/${post.slug}` }];
 
   return (
     <>
       <JsonLd
-        data={[
-          postJsonLd(post),
-          breadcrumbJsonLd([
-            { name: "Journal", path: "/blog" },
-            { name: post.title, path: `/blog/${post.slug}` },
-          ]),
-        ]}
+        data={pageJsonLd({
+          path: `/blog/${post.slug}`,
+          title: post.title,
+          description: post.dek,
+          trail,
+          mainEntity: postJsonLd(post),
+        })}
       />
 
       <PageHero
-        eyebrowLink={{ href: "/blog", label: "Journal" }}
+        breadcrumbs={trail}
         title={post.title}
         lede={post.dek}
         meta={

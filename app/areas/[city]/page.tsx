@@ -4,25 +4,32 @@ import { notFound } from "next/navigation";
 import { Container, PageHero, Prose, Stars } from "@/components/page-parts";
 import { ServiceIndex } from "@/components/service-index";
 import { ArrowRight } from "@/components/icons";
-import { cities, cityBySlug, reviews } from "@/lib/content";
+import { cities, cityBySlug, reviews, type City } from "@/lib/content";
 import { JsonLd } from "@/components/json-ld";
-import { OG_IMAGE, breadcrumbJsonLd, canonical, cityJsonLd } from "@/lib/seo";
+import { OG_IMAGE, SECTIONS, canonical, cityJsonLd, pageJsonLd } from "@/lib/seo";
 
 export function generateStaticParams() {
   return cities.map((c) => ({ city: c.slug }));
 }
+
+/* Shared by the metadata and the page's structured data, so the two name
+   and describe the page identically. */
+const cityTitle = (city: City) => `House cleaning in ${city.name}`;
+const cityDescription = (city: City) =>
+  `${city.lede} Deep, move-in/out, one-time and post-construction cleans, steam carpet cleaning and wall stain removal across ${city.name}, quoted as a fixed price.`;
 
 export async function generateMetadata(props: PageProps<"/areas/[city]">): Promise<Metadata> {
   const { city: slug } = await props.params;
   const city = cityBySlug(slug);
   if (!city) return {};
 
-  const description = `${city.lede} Deep, move-in/out, one-time and post-construction cleans, steam carpet cleaning and wall stain removal across ${city.name}, quoted as a fixed price.`;
+  const title = cityTitle(city);
+  const description = cityDescription(city);
   return {
-    title: `House cleaning in ${city.name}`,
+    title,
     description,
     openGraph: {
-      title: `House cleaning in ${city.name}`,
+      title,
       description,
       type: "website",
       url: `/areas/${city.slug}`,
@@ -38,22 +45,23 @@ export default async function CityPage(props: PageProps<"/areas/[city]">) {
   if (!city) notFound();
 
   const local = reviews.filter((r) => r.where.endsWith(city.name)).slice(0, 3);
+  const trail = [SECTIONS.areas, { name: city.name, path: `/areas/${city.slug}` }];
 
   return (
     <>
       <JsonLd
-        data={[
-          cityJsonLd(city),
-          breadcrumbJsonLd([
-            { name: "Where we clean", path: "/areas" },
-            { name: city.name, path: `/areas/${city.slug}` },
-          ]),
-        ]}
+        data={pageJsonLd({
+          path: `/areas/${city.slug}`,
+          title: cityTitle(city),
+          description: cityDescription(city),
+          trail,
+          mainEntity: cityJsonLd(city),
+        })}
       />
 
       <PageHero
-        eyebrowLink={{ href: "/areas", label: "All areas" }}
-        title={`House cleaning in ${city.name}`}
+        breadcrumbs={trail}
+        title={cityTitle(city)}
         lede={city.lede}
         meta={
           <p className="tnum inline-flex items-center gap-2 rounded-full border border-dusk-600 px-4 py-2 text-[0.9375rem] text-frost-200">

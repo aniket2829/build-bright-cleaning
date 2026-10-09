@@ -3,13 +3,16 @@ import { Container, PageHero } from "@/components/page-parts";
 import { QuoteForm } from "@/components/quote-form";
 import { business } from "@/lib/content";
 import { JsonLd } from "@/components/json-ld";
-import { breadcrumbJsonLd, canonical } from "@/lib/seo";
+import { SECTIONS, canonical, pageJsonLd } from "@/lib/seo";
+
+const page = SECTIONS.quote;
+const description =
+  "A few short steps, about three minutes, and a fixed price for your home in Edmonton. No account, no call required.";
 
 export const metadata: Metadata = {
-  title: "Get a quote",
-  description:
-    "A few short steps, about three minutes, and a fixed price for your home in Edmonton. No account, no call required.",
-  ...canonical("/quote"),
+  title: page.name,
+  description,
+  ...canonical(page.path),
 };
 
 export default async function QuotePage(props: PageProps<"/quote">) {
@@ -19,9 +22,18 @@ export default async function QuotePage(props: PageProps<"/quote">) {
 
   return (
     <>
-      <JsonLd data={breadcrumbJsonLd([{ name: "Get a quote", path: "/quote" }])} />
+      <JsonLd
+        data={pageJsonLd({
+          path: page.path,
+          title: page.name,
+          description,
+          type: "ContactPage",
+          trail: [page],
+        })}
+      />
 
       <PageHero
+        breadcrumbs={[page]}
         title="A few questions. About three minutes."
         lede="Enough to price the job properly, and not one field more. A person reads it and comes back with one number: the number you pay."
         meta={

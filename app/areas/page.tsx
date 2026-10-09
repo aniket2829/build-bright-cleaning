@@ -4,21 +4,33 @@ import { Container, PageHero } from "@/components/page-parts";
 import { ArrowRight } from "@/components/icons";
 import { cities, surroundingCommunities } from "@/lib/content";
 import { JsonLd } from "@/components/json-ld";
-import { breadcrumbJsonLd, canonical } from "@/lib/seo";
+import { SECTIONS, canonical, pageJsonLd } from "@/lib/seo";
+
+const page = SECTIONS.areas;
+const description =
+  "Build Bright cleans homes in Edmonton and the communities around it — St. Albert, Sherwood Park, Spruce Grove, Leduc and more — with the neighbourhoods we cover and how quickly a quote comes back.";
 
 export const metadata: Metadata = {
-  title: "Where we clean",
-  description:
-    "Build Bright cleans homes in Edmonton and the communities around it — St. Albert, Sherwood Park, Spruce Grove, Leduc and more — with the neighbourhoods we cover and how quickly a quote comes back.",
-  ...canonical("/areas"),
+  title: page.name,
+  description,
+  ...canonical(page.path),
 };
 
 export default function AreasPage() {
   return (
     <>
-      <JsonLd data={breadcrumbJsonLd([{ name: "Where we clean", path: "/areas" }])} />
+      <JsonLd
+        data={pageJsonLd({
+          path: page.path,
+          title: page.name,
+          description,
+          type: "CollectionPage",
+          trail: [page],
+        })}
+      />
 
       <PageHero
+        breadcrumbs={[page]}
         title="Edmonton, and the towns around it."
         lede="We only take work where we can hold the same cleaner on the same schedule, so the map stops at the edge of the region. Ten communities, and nothing we cannot cover properly."
       />

@@ -4,28 +4,34 @@ import { notFound } from "next/navigation";
 import { Container, PageHero, Prose } from "@/components/page-parts";
 import { Rooms } from "@/components/rooms";
 import { ArrowRight, Check } from "@/components/icons";
-import { services, serviceBySlug } from "@/lib/content";
+import { services, serviceBySlug, type Service } from "@/lib/content";
 import { JsonLd } from "@/components/json-ld";
-import { OG_IMAGE, breadcrumbJsonLd, canonical, serviceJsonLd } from "@/lib/seo";
+import { OG_IMAGE, SECTIONS, canonical, pageJsonLd, serviceJsonLd } from "@/lib/seo";
 
 export function generateStaticParams() {
   return services.map((s) => ({ slug: s.slug }));
 }
+
+/* The title carries the city, because the query being answered is
+   "deep cleaning Edmonton", not "deep cleaning" — and the words a searcher
+   typed are what Google bolds in the result. Shared by the metadata and the
+   page's structured data so the two name the page identically. */
+const serviceTitle = (service: Service) => `${service.name} in Edmonton`;
+const serviceDescription = (service: Service) =>
+  `${service.lede} Residential cleaning in Edmonton, Alberta.`;
 
 export async function generateMetadata(props: PageProps<"/services/[slug]">): Promise<Metadata> {
   const { slug } = await props.params;
   const service = serviceBySlug(slug);
   if (!service) return {};
 
-  /* The title carries the city, because the query being answered is
-     "deep cleaning Edmonton", not "deep cleaning" — and the words a searcher
-     typed are what Google bolds in the result. */
-  const description = `${service.lede} Residential cleaning in Edmonton, Alberta.`;
+  const title = serviceTitle(service);
+  const description = serviceDescription(service);
   return {
-    title: `${service.name} in Edmonton`,
+    title,
     description,
     openGraph: {
-      title: `${service.name} in Edmonton`,
+      title,
       description,
       type: "website",
       url: `/services/${service.slug}`,
@@ -42,21 +48,22 @@ export default async function ServicePage(props: PageProps<"/services/[slug]">) 
 
   const others = services.filter((s) => s.slug !== service.slug);
   const taskCount = service.rooms.reduce((n, r) => n + r.tasks.length, 0);
+  const trail = [SECTIONS.services, { name: service.name, path: `/services/${service.slug}` }];
 
   return (
     <>
       <JsonLd
-        data={[
-          serviceJsonLd(service),
-          breadcrumbJsonLd([
-            { name: "Services", path: "/services" },
-            { name: service.name, path: `/services/${service.slug}` },
-          ]),
-        ]}
+        data={pageJsonLd({
+          path: `/services/${service.slug}`,
+          title: serviceTitle(service),
+          description: serviceDescription(service),
+          trail,
+          mainEntity: serviceJsonLd(service),
+        })}
       />
 
       <PageHero
-        eyebrowLink={{ href: "/services", label: "All services" }}
+        breadcrumbs={trail}
         title={service.name}
         lede={service.lede}
         meta={
